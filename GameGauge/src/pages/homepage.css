@@ -4,6 +4,19 @@
     box-sizing: border-box;
   }
   
+  .welcome-section {
+    font-size: 32px;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .popular-text {
+    font-size: 18px;
+    color: #888;
+    margin-top: 5px;
+  }
+
   body {
     font-family: 'Helvetica', sans-serif;
     background-color: #1b1b1b;

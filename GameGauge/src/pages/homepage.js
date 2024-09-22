@@ -4,10 +4,10 @@ import './homepage.css';
 const HomePage = () => {
   return (
     <div className="homepage">
-      <header className="header">
-        <h1>Welcome Back, [Username]</h1>
-        <p>Here’s whats popular this week</p>
-      </header>
+      <div className="welcome-section">
+        Welcome Back, [Username]
+        <div className="popular-text">Here’s what's popular this week</div>
+      </div>
 
       <section className="section popular-week">
         <h2>Popular This Week</h2>
