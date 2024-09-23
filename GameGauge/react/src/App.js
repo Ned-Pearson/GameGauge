@@ -4,6 +4,7 @@ import HomePage from './pages/homepage';
 import Header from './components/header';
 import Footer from './components/footer';
 import '@fortawesome/fontawesome-free/css/all.min.css';
+import Signup from './pages/signup';
 
 
 function App() {
@@ -13,6 +14,9 @@ function App() {
       <div className="main-content">
         <Routes>
           <Route path="/" element={<HomePage />} />
+        </Routes>
+        <Routes>
+          <Route path="/signup" element={<Signup />} />
         </Routes>
       </div>
       <Footer /> {/* Needs expansion */}
