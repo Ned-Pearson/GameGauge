@@ -1,0 +1,8 @@
+TODO:
+
+- Properly authenticate login with the JWT Tokens
+- Add a logout button
+- Add signup + signin buttons if user is not logged in
+- Incorporate games API https://api-docs.igdb.com/
+- Add review/log, list, games and individual game pages
+- add functionality to follow other users
