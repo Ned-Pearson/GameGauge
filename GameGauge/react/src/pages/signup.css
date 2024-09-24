@@ -50,4 +50,26 @@
     color: red;
     margin-bottom: 10px;
   }
+
+  .signin-link-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .signin-link-container p {
+    margin-right: 10px;
+    color: #bbb;
+  }
+  
+  .signin-link-container a {
+    color: #39d353;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .signin-link-container a:hover {
+    color: #32bd46;
+  }
   
