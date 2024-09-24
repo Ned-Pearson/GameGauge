@@ -5,6 +5,7 @@ import Header from './components/header';
 import Footer from './components/footer';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Signup from './pages/signup';
+import Signin from './pages/signin';
 
 
 function App() {
@@ -17,6 +18,9 @@ function App() {
         </Routes>
         <Routes>
           <Route path="/signup" element={<Signup />} />
+        </Routes>
+        <Routes>
+          <Route path="/signin" element={<Signin />} />
         </Routes>
       </div>
       <Footer /> {/* Needs expansion */}
