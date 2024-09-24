@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import './signin.css'; 
 
 function Signin() {
@@ -19,8 +20,13 @@ function Signin() {
       const response = await axios.post('http://localhost:5000/api/signin', { username, password });
 
       if (response.data.token) {
-        // Store JWT token in localStorage or cookies for further authentication
+        // Store JWT token in localStorage for further authentication
         localStorage.setItem('token', response.data.token);
+
+        const decodedToken = jwtDecode(response.data.token);
+
+        // Store the username in localStorage
+        localStorage.setItem('username', decodedToken.username); 
         // If sign-in is successful, redirect to the main page
         navigate('/');
       } else {
@@ -76,3 +82,4 @@ function Signin() {
 }
 
 export default Signin;
+ 
