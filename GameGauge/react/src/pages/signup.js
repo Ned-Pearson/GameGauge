@@ -86,6 +86,11 @@ function Signup() {
         <button type="submit" disabled={loading}>
           {loading ? 'Signing Up...' : 'Sign Up'}
         </button>
+        
+        <div className="signin-link-container">
+          <p>Already have an account?</p>
+          <a href="/signin">Sign In</a>
+        </div>
       </form>
     </div>
   );
