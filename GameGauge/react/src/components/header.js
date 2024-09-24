@@ -1,10 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './header.css';
 
 function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    // Retrieve the username from localStorage if available
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
 
   // Toggle the search bar
   const handleSearchToggle = () => {
@@ -38,7 +47,11 @@ function Header() {
             onMouseLeave={toggleDropdown}
           >
             <img className="profile-pic" src="https://via.placeholder.com/30" alt="Profile" />
-            <span className="username">Username</span>
+            <span className="username">{username ? (
+          <p>{username}</p>
+        ) : (
+          <p>Guest</p>
+        )}</span>
             <span className="down-arrow">▼</span>
 
             {/* Dropdown menu */}
