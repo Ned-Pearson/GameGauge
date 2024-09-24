@@ -21,8 +21,6 @@ exports.signup = async (req, res) => {
 
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log('password:', { password });
-    console.log('hashed password:', { hashedPassword });
 
     // Insert new user into database
     await db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
