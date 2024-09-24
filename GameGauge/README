@@ -6,3 +6,9 @@ TODO:
 - Incorporate games API https://api-docs.igdb.com/
 - Add review/log, list, games and individual game pages
 - add functionality to follow other users
+- Add forgot password functionality
+
+Lower Priority:
+
+- Add "Remember Me" feature to sign in that allows the user to stay logged in (refresh token mechanism)
+- Some for of analytics for practise? (google analytics)
