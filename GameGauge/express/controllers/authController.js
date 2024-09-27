@@ -2,27 +2,29 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
-// Helper function to generate JWT
-const generateToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '1h' });
+// Helper function to generate Access Token
+const generateAccessToken = (userId) => {
+  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '15m' }); // Short-lived access token
 };
 
-// Sign-Up Handler
+// Helper function to generate Refresh Token
+const generateRefreshToken = (userId) => {
+  return jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' }); // Long-lived refresh token
+};
+
+// Sign-Up Handler 
 exports.signup = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Check if user already exists
     const [existingUser] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
 
     if (existingUser.length) {
       return res.status(400).json({ message: 'Username already exists' });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Insert new user into database
     await db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
 
     return res.status(201).json({ message: 'User created successfully' });
@@ -31,30 +33,74 @@ exports.signup = async (req, res) => {
   }
 };
 
-// Sign-In Handler
+// Sign-In Handler 
 exports.signin = async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // Check if the user exists
     const [user] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
 
     if (!user.length) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Compare the password with the stored hash
     const isMatch = await bcrypt.compare(password, user[0].password);
 
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Generate JWT token
-    const token = generateToken(user[0].id);
+    const accessToken = generateAccessToken(user[0].id);
+    const refreshToken = generateRefreshToken(user[0].id);
 
-    return res.status(200).json({ token, message: 'Signed in successfully' });
+    await db.query('UPDATE users SET refresh_token = ? WHERE id = ?', [refreshToken, user[0].id]);
+
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+
+    return res.status(200).json({ accessToken, message: 'Signed in successfully' });
   } catch (err) {
     return res.status(500).json({ error: 'Server error' });
   }
+};
+
+// Refresh Token Handler
+exports.refreshToken = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (!refreshToken) {
+    return res.status(403).json({ message: 'No refresh token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    const [user] = await db.query('SELECT * FROM users WHERE id = ? AND refresh_token = ?', [decoded.userId, refreshToken]);
+
+    if (!user.length) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    const newAccessToken = generateAccessToken(decoded.userId);
+
+    return res.status(200).json({ accessToken: newAccessToken });
+  } catch (err) {
+    return res.status(403).json({ message: 'Invalid or expired refresh token' });
+  }
+};
+
+// Logout Handler 
+exports.logout = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+
+  if (refreshToken) {
+    await db.query('UPDATE users SET refresh_token = NULL WHERE refresh_token = ?', [refreshToken]);
+  }
+
+  res.clearCookie('refreshToken');
+  return res.status(200).json({ message: 'Logged out successfully' });
 };

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './header.css';
 
 function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [username, setUsername] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Retrieve the username from localStorage if available
@@ -25,6 +26,14 @@ function Header() {
     setDropdownOpen(!isDropdownOpen);
   };
 
+  // Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('username');
+    setUsername('');
+    navigate('/signin'); // Redirect to sign-in page after logout
+  };
+
   return (
     <header className="header">
       {/* Left section with logo */}
@@ -40,32 +49,35 @@ function Header() {
       {/* Right section with navigation */}
       <div className="header-right">
         <nav className="nav-links">
-          {/* Profile dropdown */}
-          <div 
-            className="profile-section" 
-            onMouseEnter={toggleDropdown} 
-            onMouseLeave={toggleDropdown}
-          >
-            <img className="profile-pic" src="https://via.placeholder.com/30" alt="Profile" />
-            <span className="username">{username ? (
-          <p>{username}</p>
-        ) : (
-          <p>Guest</p>
-        )}</span>
-            <span className="down-arrow">▼</span>
+          {/* Conditionally render Sign In / Sign Up or User dropdown */}
+          {username ? (
+            <div 
+              className="profile-section" 
+              onMouseEnter={toggleDropdown} 
+              onMouseLeave={toggleDropdown}
+            >
+              <img className="profile-pic" src="https://via.placeholder.com/30" alt="Profile" />
+              <span className="username">{username}</span>
+              <span className="down-arrow">▼</span>
 
-            {/* Dropdown menu */}
-            {isDropdownOpen && (
-              <div className="dropdown-menu">
-                <div className="dropdown-item">Placeholder 1</div>
-                <div className="dropdown-item">Placeholder 2</div>
-                <div className="dropdown-item">Placeholder 3</div>
-                <div className="dropdown-item">Placeholder 4</div>
-                <div className="dropdown-item">Placeholder 5</div>
-                <div className="dropdown-item">Placeholder 6</div>
-              </div>
-            )}
-          </div>
+              {/* Dropdown menu */}
+              {isDropdownOpen && (
+                <div className="dropdown-menu">
+                  <div className="dropdown-item">Profile</div>
+                  <div className="dropdown-item">Settings</div>
+                  {/* Logout option */}
+                  <div className="dropdown-item" onClick={handleLogout}>
+                    Logout
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              <Link to="/signin" className="nav-item">Sign In</Link>
+              <Link to="/signup" className="nav-item">Sign Up</Link>
+            </>
+          )}
 
           {/* Navigation links */}
           <Link to="/games" className="nav-item">Games</Link>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './homepage.css';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; 
 import { isAuthenticated } from '../utils/auth';
 
 const HomePage = () => {
@@ -10,8 +10,8 @@ const HomePage = () => {
     if (isAuthenticated()) {
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
-
-      // Extract the username from the token
+      
+      // Set username from token
       setUsername(decodedToken.username);
     } else {
       setUsername(''); // User is not authenticated

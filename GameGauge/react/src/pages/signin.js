@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; 
+import { isAuthenticated } from '../utils/auth'; 
 import './signin.css'; 
 
 function Signin() {
@@ -20,17 +21,19 @@ function Signin() {
       const response = await axios.post('http://localhost:5000/api/signin', { username, password });
 
       if (response.data.token) {
-        // Store JWT token in localStorage for further authentication
+        // Store JWT token and username in localStorage
         localStorage.setItem('token', response.data.token);
 
         const decodedToken = jwtDecode(response.data.token);
+        localStorage.setItem('username', decodedToken.username); //Not necessary but keeping for potential debugging
 
-        // Store the username in localStorage
-        localStorage.setItem('username', decodedToken.username); 
-        // If sign-in is successful, redirect to the main page
-        navigate('/');
+        // After successful sign-in, check authentication status using the helper
+        if (isAuthenticated()) {
+          navigate('/'); // Redirect to the main page if authenticated
+        } else {
+          setError('Session expired. Please sign in again.');
+        }
       } else {
-        // Display the error message from the backend
         setError(response.data.message || 'An error occurred. Please try again.');
       }
     } catch (err) {
@@ -47,39 +50,38 @@ function Signin() {
 
   return (
     <div className="signin-container">
-  <form onSubmit={handleSignin} className="signin-form">
-    <h2>Sign In</h2>
+      <form onSubmit={handleSignin} className="signin-form">
+        <h2>Sign In</h2>
 
-    {error && <p className="error-message">{error}</p>}
+        {error && <p className="error-message">{error}</p>}
 
-    <label>Username</label>
-    <input
-      type="text"
-      value={username}
-      onChange={(e) => setUsername(e.target.value)}
-      required
-    />
+        <label>Username</label>
+        <input
+          type="text"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          required
+        />
 
-    <label>Password</label>
-    <input
-      type="password"
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      required
-    />
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
 
-    <button type="submit" disabled={loading}>
-      {loading ? 'Signing In...' : 'Sign In'}
-    </button>
+        <button type="submit" disabled={loading}>
+          {loading ? 'Signing In...' : 'Sign In'}
+        </button>
 
-    <div className="signup-link-container">
-      <p>Don't have an account?</p>
-      <a href="/signup">Sign Up</a>
+        <div className="signup-link-container">
+          <p>Don't have an account?</p>
+          <a href="/signup">Sign Up</a>
+        </div>
+      </form>
     </div>
-  </form>
-</div>
   );
 }
 
 export default Signin;
- 
