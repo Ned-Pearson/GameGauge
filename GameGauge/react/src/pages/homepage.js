@@ -1,17 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import './homepage.css';
+import { jwtDecode } from 'jwt-decode';
+import { isAuthenticated } from '../utils/auth';
 
 const HomePage = () => {
   const [username, setUsername] = useState('');
 
   useEffect(() => {
-    // Get the username from localStorage
-    const storedUsername = localStorage.getItem('username');
-    
-    if (storedUsername) {
-      setUsername(storedUsername); // Set the username if it exists
+    if (isAuthenticated()) {
+      const token = localStorage.getItem('token');
+      const decodedToken = jwtDecode(token);
+
+      // Extract the username from the token
+      setUsername(decodedToken.username);
     } else {
-      setUsername(''); // Clear the username if not available
+      setUsername(''); // User is not authenticated
     }
   }, []); // Empty dependency array ensures this runs only on component mount
 
