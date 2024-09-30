@@ -9,7 +9,7 @@ const generateAccessToken = (userId) => {
 
 // Helper function to generate Refresh Token
 const generateRefreshToken = (userId) => {
-  return jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' }); // Long-lived refresh token
+  return jwt.sign({ userId }, process.env.REFRESH_SECRET, { expiresIn: '30d' }); // Long-lived refresh token
 };
 
 // Sign-Up Handler 

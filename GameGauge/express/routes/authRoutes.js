@@ -14,7 +14,8 @@ const generateAccessToken = (userId) => {
 
 // Helper function to generate Refresh Token
 const generateRefreshToken = (userId) => {
-  return jwt.sign({ userId }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '30d' }); // Long-lived refresh token (30 days)
+  
+  return jwt.sign({ userId }, process.env.REFRESH_SECRET, { expiresIn: '30d' }); // Long-lived refresh token (30 days)
 };
 
 // Signup Route
