@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; 
-import { isAuthenticated } from '../utils/auth'; 
+import { AuthContext } from '../context/authContext';
 import './signin.css'; 
 
 function Signin() {
@@ -11,6 +11,9 @@ function Signin() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
+  // Access the login function from AuthContext
+  const { login } = useContext(AuthContext);
 
   const handleSignin = async (e) => {
     e.preventDefault();
@@ -26,18 +29,15 @@ function Signin() {
       
 
       if (response.data.accessToken) {
-        // Store JWT token and username in localStorage
-        localStorage.setItem('token', response.data.accessToken);
-
+        // Decode the JWT token to extract the username
         const decodedToken = jwtDecode(response.data.accessToken);
-        localStorage.setItem('username', decodedToken.username); 
+        const extractedUsername = decodedToken.username;
 
-        // After successful sign-in, check authentication status using the helper
-        if (isAuthenticated()) {
-          navigate('/'); // Redirect to the main page if authenticated
-        } else {
-          setError('Session expired. Please sign in again.');
-        }
+        // Use the login function from AuthContext
+        login(response.data.accessToken, extractedUsername);
+
+        // Redirect to the main page
+        navigate('/'); 
       } else {
         console.log('Signin error:', response.data.message);
         setError(response.data.message || 'An error occurred. Please try again.');

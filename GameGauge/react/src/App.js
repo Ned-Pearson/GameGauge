@@ -6,25 +6,29 @@ import Footer from './components/footer';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Signup from './pages/signup';
 import Signin from './pages/signin';
+import { AuthProvider } from './context/authContext';
 
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <div className="main-content">
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-        </Routes>
-        <Routes>
-          <Route path="/signup" element={<Signup />} />
-        </Routes>
-        <Routes>
-          <Route path="/signin" element={<Signin />} />
-        </Routes>
-      </div>
-      <Footer /> {/* Needs expansion */}
-    </Router>
+
+    <AuthProvider>
+      <Router>
+        <Header />
+        <div className="main-content">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+          </Routes>
+          <Routes>
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+          <Routes>
+            <Route path="/signin" element={<Signin />} />
+          </Routes>
+        </div>
+        <Footer /> {/* Needs expansion */}
+      </Router>
+    </AuthProvider>
   );
 }
 
