@@ -1,8 +1,8 @@
 TODO:
 
-- FIX header rendering post login - requires a refresh to update - incorperate context to fix?
 - Incorporate games API https://api-docs.igdb.com/
 - Add review/log, list, games and individual game pages
+- Trim whitespace in username login query
 - add functionality to follow other users
 - Add forgot password functionality
 
