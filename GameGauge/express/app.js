@@ -8,7 +8,8 @@ const app = express();
 
 // Enable CORS to allow requests from the React app (modify the origin as needed)
 app.use(cors({
-  origin: 'http://localhost:3000'  // Modify this to match your frontend origin URL
+  origin: 'http://localhost:3000',  // Modify this to match your frontend origin URL
+  credentials: true // Allows cookies and credentials
 }));
 
 // Middleware

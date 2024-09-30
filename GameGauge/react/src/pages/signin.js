@@ -18,14 +18,19 @@ function Signin() {
     setLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/signin', { username, password });
+      console.log('Attempting to sign in:', { username });
+      const response = await axios.post('http://localhost:5000/api/signin', 
+        { username, password },
+        { withCredentials: true } // Include cookies in the request
+      );
+      
 
-      if (response.data.token) {
+      if (response.data.accessToken) {
         // Store JWT token and username in localStorage
-        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('token', response.data.accessToken);
 
-        const decodedToken = jwtDecode(response.data.token);
-        localStorage.setItem('username', decodedToken.username); //Not necessary but keeping for potential debugging
+        const decodedToken = jwtDecode(response.data.accessToken);
+        localStorage.setItem('username', decodedToken.username); 
 
         // After successful sign-in, check authentication status using the helper
         if (isAuthenticated()) {
@@ -34,6 +39,7 @@ function Signin() {
           setError('Session expired. Please sign in again.');
         }
       } else {
+        console.log('Signin error:', response.data.message);
         setError(response.data.message || 'An error occurred. Please try again.');
       }
     } catch (err) {
