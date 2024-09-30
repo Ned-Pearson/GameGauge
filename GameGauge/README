@@ -1,6 +1,6 @@
 TODO:
 
-- FIX header rendering post login - requires a refresh to update - incoroperate context to fix?
+- FIX header rendering post login - requires a refresh to update - incorperate context to fix?
 - Incorporate games API https://api-docs.igdb.com/
 - Add review/log, list, games and individual game pages
 - add functionality to follow other users
@@ -8,5 +8,6 @@ TODO:
 
 Lower Priority:
 
-- Add "Remember Me" feature to sign in that allows the user to stay logged in (refresh token mechanism) - Did this but its by default (user is logged in for a 30 day period witha refresh token)
+- Refactor code and get rid of duplicates especially in backend.
+  - Do after frontend games functionality implemented
 - Some for of analytics for practise? (google analytics)
