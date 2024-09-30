@@ -2,6 +2,7 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser'); // Import cookie-parser
 const authRoutes = require('./routes/authRoutes');  // Import your auth routes
 
 const app = express();
@@ -14,6 +15,8 @@ app.use(cors({
 
 // Middleware
 app.use(bodyParser.json());  // Parse incoming JSON requests
+
+app.use(cookieParser()); 
 
 // Routes
 app.use('/api', authRoutes);  // Use the auth routes for API

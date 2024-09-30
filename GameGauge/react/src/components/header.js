@@ -1,20 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { AuthContext } from '../context/authContext';
 import './header.css';
 
 function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  const [username, setUsername] = useState('');
+  
+  // Access auth state and logout function from authContext
+  const { auth, logout } = useContext(AuthContext);
+  
   const navigate = useNavigate();
-
-  useEffect(() => {
-    // Retrieve the username from localStorage if available
-    const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
-      setUsername(storedUsername);
-    }
-  }, []);
 
   // Toggle the search bar
   const handleSearchToggle = () => {
@@ -27,10 +24,13 @@ function Header() {
   };
 
   // Logout handler
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('username');
-    setUsername('');
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:5000/api/logout', {}, { withCredentials: true });
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+    logout(); // Update the auth context
     navigate('/signin'); // Redirect to sign-in page after logout
   };
 
@@ -50,21 +50,21 @@ function Header() {
       <div className="header-right">
         <nav className="nav-links">
           {/* Conditionally render Sign In / Sign Up or User dropdown */}
-          {username ? (
+          {auth.username ? (
             <div 
               className="profile-section" 
               onMouseEnter={toggleDropdown} 
               onMouseLeave={toggleDropdown}
             >
               <img className="profile-pic" src="https://via.placeholder.com/30" alt="Profile" />
-              <span className="username">{username}</span>
+              <span className="username">{auth.username}</span>
               <span className="down-arrow">▼</span>
 
               {/* Dropdown menu */}
               {isDropdownOpen && (
                 <div className="dropdown-menu">
-                  <div className="dropdown-item">Profile</div>
-                  <div className="dropdown-item">Settings</div>
+                                    <div className="dropdown-item">Profile</div>
+                                    <div className="dropdown-item">Settings</div>
                   {/* Logout option */}
                   <div className="dropdown-item" onClick={handleLogout}>
                     Logout

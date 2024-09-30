@@ -2,7 +2,6 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
-const cookieParser = require('cookie-parser'); // Add cookie-parser for managing cookies
 require('dotenv').config();
 
 const router = express.Router();
@@ -92,6 +91,37 @@ router.post('/signin', async (req, res) => {
   }
 });
 
+// Verify Token Route
+router.get('/verify-token', async (req, res) => {
+  const authHeader = req.headers['authorization'];
+  
+  if (!authHeader) {
+    return res.status(401).json({ valid: false, message: 'No token provided.' });
+  }
+
+  const token = authHeader.split(' ')[1];
+
+  if (!token) {
+    return res.status(401).json({ valid: false, message: 'Malformed token.' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    
+    // Optionally, you can check if the user still exists in the database
+    const [user] = await db.query('SELECT username FROM users WHERE id = ?', [decoded.userId]);
+
+    if (!user.length) {
+      return res.status(401).json({ valid: false, message: 'User does not exist.' });
+    }
+
+    return res.status(200).json({ valid: true, username: user[0].username });
+  } catch (error) {
+    console.error('Token verification error:', error);
+    return res.status(401).json({ valid: false, message: 'Invalid or expired token.' });
+  }
+});
+
 // Refresh Token Route
 router.post('/refresh-token', async (req, res) => {
   const refreshToken = req.cookies.refreshToken; // Get refresh token from cookies
@@ -102,17 +132,17 @@ router.post('/refresh-token', async (req, res) => {
 
   try {
     // Verify the refresh token
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
 
-    // Check if refresh token is valid in the database
+    // Fetch the user from the database using decoded.userId
     const [user] = await db.query('SELECT * FROM users WHERE id = ? AND refresh_token = ?', [decoded.userId, refreshToken]);
 
     if (!user.length) {
       return res.status(403).json({ success: false, message: 'Invalid refresh token.' });
     }
 
-    // Generate a new access token
-    const newAccessToken = generateAccessToken(decoded.userId);
+    // Generate a new access token using the user object
+    const newAccessToken = generateAccessToken(user[0]);
 
     return res.status(200).json({ success: true, accessToken: newAccessToken });
   } catch (error) {
@@ -123,25 +153,24 @@ router.post('/refresh-token', async (req, res) => {
 
 // Logout Route
 router.post('/logout', async (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
+  try {
+    const refreshToken = req.cookies?.refreshToken; // Safely access refreshToken
 
-  if (refreshToken) {
-    try {
+    if (refreshToken) {
       // Clear the refresh token from the database (if it's still valid)
       await db.query('UPDATE users SET refresh_token = NULL WHERE refresh_token = ?', [refreshToken]);
 
       // Clear the refresh token cookie
       res.clearCookie('refreshToken');
-    } catch (error) {
-      console.error('Error during logout:', error);
-      return res.status(500).json({ success: false, message: 'Logout failed. Please try again later.' });
     }
+
+    // Clear the cookie whether token was valid or not (expired or missing)
+    res.clearCookie('refreshToken');
+    return res.status(200).json({ success: true, message: 'Logged out successfully.' });
+  } catch (error) {
+    console.error('Error during logout:', error);
+    return res.status(500).json({ success: false, message: 'Logout failed. Please try again later.' });
   }
-
-  // Clear the cookie whether token was valid or not (expired or missing)
-  res.clearCookie('refreshToken');
-  return res.status(200).json({ success: true, message: 'Logged out successfully.' });
 });
-
 
 module.exports = router;
