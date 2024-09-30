@@ -8,14 +8,21 @@ require('dotenv').config();
 const router = express.Router();
 
 // Helper function to generate Access Token
-const generateAccessToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '15m' }); // Short-lived access token (15 minutes)
+const generateAccessToken = (user) => {
+  return jwt.sign(
+    { userId: user.id, username: user.username }, // Include username in the token payload
+    process.env.JWT_SECRET,
+    { expiresIn: '15m' }
+  );
 };
 
 // Helper function to generate Refresh Token
-const generateRefreshToken = (userId) => {
-  
-  return jwt.sign({ userId }, process.env.REFRESH_SECRET, { expiresIn: '30d' }); // Long-lived refresh token (30 days)
+const generateRefreshToken = (user) => {
+  return jwt.sign(
+    { userId: user.id, username: user.username }, // Include username in the token payload
+    process.env.REFRESH_SECRET,
+    { expiresIn: '30d' }
+  );
 };
 
 // Signup Route
@@ -62,9 +69,10 @@ router.post('/signin', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Invalid username or password.' });
     }
 
-    // Generate Access and Refresh Tokens
-    const accessToken = generateAccessToken(user[0].id);
-    const refreshToken = generateRefreshToken(user[0].id);
+    // Generate Access and Refresh Tokens with both userId and username
+    const accessToken = generateAccessToken(user[0]);
+    const refreshToken = generateRefreshToken(user[0]);
+
 
     // Store the refresh token in the database
     await db.query('UPDATE users SET refresh_token = ? WHERE id = ?', [refreshToken, user[0].id]);
