@@ -5,6 +5,7 @@ TODO:
 - Beautify search results page
 - Make header search bar search on enter key
 - Add a game specific page that can be redirected to that shows all games info and has ability to log or review or add to list.
+- Add next page functionality to search results in cases of more than 1 page of game results
 
 - Add review/log, list, games
 - Trim whitespace in username login query
