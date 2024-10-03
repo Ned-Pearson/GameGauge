@@ -6,6 +6,7 @@ import Footer from './components/footer';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import Signup from './pages/signup';
 import Signin from './pages/signin';
+import SearchResults from './pages/searchResults';
 import { AuthProvider } from './context/authContext';
 
 
@@ -24,6 +25,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/signin" element={<Signin />} />
+          </Routes>
+          <Routes>
+            <Route path="/search-results" element={<SearchResults />} />
           </Routes>
         </div>
         <Footer /> {/* Needs expansion */}
