@@ -1,23 +1,33 @@
 const axios = require('axios');
 
-// Function to obtain a new IGDB access token
-// const getAccessToken = async () => {
-//   try {
-//     const response = await axios.post('https://id.twitch.tv/oauth2/token', null, {
-//       params: {
-//         client_id: process.env.IGDB_CLIENT_ID,
-//         client_secret: process.env.IGDB_CLIENT_SECRET,
-//         grant_type: 'client_credentials',
-//       },
-//     });
-//     return response.data.access_token;
-//   } catch (error) {
-//     console.error('Error obtaining access token:', error.response?.data || error.message);
-//     throw new Error('Failed to obtain IGDB access token.');
-//   }
-// };
+let cachedAccessToken = null;
+let tokenExpiryTime = null;  // Save the expiry time of the token
 
-const ACCESS_TOKEN = '6ind8louer031pmqiqg6espzjp8e8c';
+const getAccessToken = async () => {
+  // If the token exists and hasn't expired, return it
+  if (cachedAccessToken && tokenExpiryTime > Date.now()) {
+    return cachedAccessToken;
+  }
+
+  // Otherwise, fetch a new token
+  try {
+    const response = await axios.post(`https://id.twitch.tv/oauth2/token`, null, {
+      params: {
+        client_id: process.env.IGDB_CLIENT_ID,
+        client_secret: process.env.IGDB_CLIENT_SECRET,
+        grant_type: 'client_credentials',
+      },
+    });
+
+    cachedAccessToken = response.data.access_token;
+    tokenExpiryTime = Date.now() + (response.data.expires_in * 1000);  // Set expiry time (converts seconds to milliseconds)
+
+    return cachedAccessToken;
+  } catch (error) {
+    console.error('Error fetching access token:', error);
+    throw new Error('Failed to obtain IGDB access token');
+  }
+};
 
 // Function to handle search requests
 const searchGames = async (req, res) => {
@@ -29,13 +39,13 @@ const searchGames = async (req, res) => {
 
   try {
     // Obtain a valid access token
-    // const accessToken = await getAccessToken();
-    const accessToken = ACCESS_TOKEN;
+    const accessToken = await getAccessToken();
+    console.log('Access Token:', accessToken);
 
     // Make a POST request to IGDB API
     const igdbResponse = await axios.post(
       'https://api.igdb.com/v4/games',
-      `search "${query}"; fields id, name, cover.url; limit 10;`,
+      `search "${query}"; fields id, name, cover.url; limit 12;`,
       {
         headers: {
           'Client-ID': '6emwjyh3l2upcni50nw2vryt86uilb',
