@@ -1,7 +1,12 @@
 TODO:
 
-- Incorporate games API https://api-docs.igdb.com/
-- Add review/log, list, games and individual game pages
+- Fix access token function in searchController.js
+- Fix backend .env file
+- Beautify search results page
+- Make header search bar search on enter key
+- Add a game specific page that can be redirected to that shows all games info and has ability to log or review or add to list.
+
+- Add review/log, list, games
 - Trim whitespace in username login query
 - add functionality to follow other users
 - Add forgot password functionality
