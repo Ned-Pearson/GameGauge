@@ -1,37 +1,41 @@
 import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { searchGames } from '../utils/searchGames'; 
 import axios from 'axios';
 import { AuthContext } from '../context/authContext';
 import './header.css';
 
 function Header() {
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
-  
-  // Access auth state and logout function from authContext
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const { auth, logout } = useContext(AuthContext);
-  
   const navigate = useNavigate();
 
-  // Toggle the search bar
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
   };
 
-  // Toggle the profile dropdown
-  const toggleDropdown = () => {
-    setDropdownOpen(!isDropdownOpen);
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
   };
 
-  // Logout handler
+  const handleSearchSubmit = async () => {
+    if (searchQuery.trim() === '') return; // Do nothing if search is empty
+    const results = await searchGames(searchQuery);
+    
+    // Navigate to SearchResults page with results and query
+    navigate('/search-results', { state: { results, query: searchQuery } });
+  };
+
   const handleLogout = async () => {
     try {
       await axios.post('http://localhost:5000/api/logout', {}, { withCredentials: true });
     } catch (error) {
       console.error('Logout failed:', error);
     }
-    logout(); // Update the auth context
-    navigate('/signin'); // Redirect to sign-in page after logout
+    logout();
+    navigate('/signin');
   };
 
   return (
@@ -49,26 +53,20 @@ function Header() {
       {/* Right section with navigation */}
       <div className="header-right">
         <nav className="nav-links">
-          {/* Conditionally render Sign In / Sign Up or User dropdown */}
           {auth.username ? (
             <div 
               className="profile-section" 
-              onMouseEnter={toggleDropdown} 
-              onMouseLeave={toggleDropdown}
+              onMouseEnter={() => setDropdownOpen(true)} 
+              onMouseLeave={() => setDropdownOpen(false)}
             >
               <img className="profile-pic" src="https://via.placeholder.com/30" alt="Profile" />
               <span className="username">{auth.username}</span>
               <span className="down-arrow">▼</span>
-
-              {/* Dropdown menu */}
               {isDropdownOpen && (
                 <div className="dropdown-menu">
-                                    <div className="dropdown-item">Profile</div>
-                                    <div className="dropdown-item">Settings</div>
-                  {/* Logout option */}
-                  <div className="dropdown-item" onClick={handleLogout}>
-                    Logout
-                  </div>
+                  <div className="dropdown-item">Profile</div>
+                  <div className="dropdown-item">Settings</div>
+                  <div className="dropdown-item" onClick={handleLogout}>Logout</div>
                 </div>
               )}
             </div>
@@ -78,13 +76,11 @@ function Header() {
               <Link to="/signup" className="nav-item">Sign Up</Link>
             </>
           )}
-
-          {/* Navigation links */}
           <Link to="/games" className="nav-item">Games</Link>
           <Link to="/lists" className="nav-item">Lists</Link>
         </nav>
 
-        {/* Search bar toggle */}
+        {/* Search bar */}
         <div className="search-container">
           {!isSearchOpen ? (
             <button className="search-btn" onClick={handleSearchToggle}>
@@ -92,7 +88,20 @@ function Header() {
             </button>
           ) : (
             <div className="search-bar">
-              <input type="text" placeholder="Search..." />
+              <input 
+                type="text" 
+                placeholder="Search..." 
+                value={searchQuery}
+                onChange={handleSearchInputChange}
+                onKeyPress={(e) => {
+                  if (e.key === 'Enter') {
+                    handleSearchSubmit();
+                  }
+                }}
+              />
+              <button className="search-submit-btn" onClick={handleSearchSubmit}>
+                <i className="fas fa-search"></i>
+              </button>
               <button className="close-search-btn" onClick={handleSearchToggle}>
                 <i className="fas fa-times"></i>
               </button>
@@ -100,7 +109,6 @@ function Header() {
           )}
         </div>
 
-        {/* Log button */}
         <button className="log-btn">+ LOG</button>
       </div>
     </header>
