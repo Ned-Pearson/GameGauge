@@ -4,6 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser'); // Import cookie-parser
 const authRoutes = require('./routes/authRoutes');  // Import your auth routes
+const searchRoutes = require('./routes/searchRoutes'); // Import your search routes
 
 const app = express();
 
@@ -15,11 +16,11 @@ app.use(cors({
 
 // Middleware
 app.use(bodyParser.json());  // Parse incoming JSON requests
-
 app.use(cookieParser()); 
 
 // Routes
-app.use('/api', authRoutes);  // Use the auth routes for API
+app.use('/api', authRoutes);    // Use the auth routes for API
+app.use('/api', searchRoutes);  // Use the search routes for API
 
 // Root route for health check
 app.get('/', (req, res) => {
