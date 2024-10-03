@@ -1,9 +1,8 @@
 TODO:
 
-- Fix access token function in searchController.js
+- Add partial search to search function
 - Fix backend .env file
 - Beautify search results page
-- Make header search bar search on enter key
 - Add a game specific page that can be redirected to that shows all games info and has ability to log or review or add to list.
 - Add next page functionality to search results in cases of more than 1 page of game results
 
