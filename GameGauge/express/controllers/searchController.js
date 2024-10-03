@@ -45,7 +45,10 @@ const searchGames = async (req, res) => {
     // Make a POST request to IGDB API
     const igdbResponse = await axios.post(
       'https://api.igdb.com/v4/games',
-      `search "${query}"; fields id, name, cover.url, genres.name; limit 12;`,
+      `search "${query}"; 
+      fields id, name, cover.url, genres.name, summary, involved_companies.company.name, first_release_date; 
+      where category = 0 & cover != null & first_release_date != null;
+      limit 12;`,
       {
         headers: {
           'Client-ID': '6emwjyh3l2upcni50nw2vryt86uilb',
