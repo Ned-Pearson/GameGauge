@@ -1,8 +1,6 @@
 TODO:
 
-- Add partial search to search function
 - Fix backend .env file
-- Beautify search results page
 - Add a game specific page that can be redirected to that shows all games info and has ability to log or review or add to list.
 - Add next page functionality to search results in cases of more than 1 page of game results
 
@@ -16,3 +14,7 @@ Lower Priority:
 - Refactor code and get rid of duplicates especially in backend.
   - Do after frontend games functionality implemented
 - Some for of analytics for practise? (google analytics)
+
+Unable:
+
+- Add partial search to search function (Not possible with how api is structured unfortunately)
