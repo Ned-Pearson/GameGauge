@@ -1,15 +1,13 @@
 const axios = require('axios');
 
 let cachedAccessToken = null;
-let tokenExpiryTime = null;  // Save the expiry time of the token
+let tokenExpiryTime = null;
 
 const getAccessToken = async () => {
-  // If the token exists and hasn't expired, return it
   if (cachedAccessToken && tokenExpiryTime > Date.now()) {
     return cachedAccessToken;
   }
 
-  // Otherwise, fetch a new token
   try {
     const response = await axios.post(`https://id.twitch.tv/oauth2/token`, null, {
       params: {
@@ -20,7 +18,7 @@ const getAccessToken = async () => {
     });
 
     cachedAccessToken = response.data.access_token;
-    tokenExpiryTime = Date.now() + (response.data.expires_in * 1000);  // Set expiry time (converts seconds to milliseconds)
+    tokenExpiryTime = Date.now() + (response.data.expires_in * 1000);
 
     return cachedAccessToken;
   } catch (error) {
@@ -29,36 +27,36 @@ const getAccessToken = async () => {
   }
 };
 
-// Function to handle search requests
 const searchGames = async (req, res) => {
-  const { query } = req.body;
+  const { query, limit = 12 } = req.body;
 
   if (!query) {
     return res.status(400).json({ message: 'Search query is required.' });
   }
 
   try {
-    // Obtain a valid access token
     const accessToken = await getAccessToken();
-    console.log('Access Token:', accessToken);
 
-    // Make a POST request to IGDB API
     const igdbResponse = await axios.post(
       'https://api.igdb.com/v4/games',
-      `search "${query}"; 
-      fields id, name, cover.url, genres.name, summary, involved_companies.company.name, first_release_date; 
-      where category = 0 & cover != null & first_release_date != null;
-      limit 12;`,
+      `fields id, name, cover.url, genres.name, summary, involved_companies.company.name, first_release_date; 
+      search "${query}"; 
+      where category = 0 & version_parent = null & parent_game = null; 
+      limit ${limit};`, // Dynamically set the limit
       {
         headers: {
-          'Client-ID': '6emwjyh3l2upcni50nw2vryt86uilb',
+          'Client-ID': process.env.IGDB_CLIENT_ID,
           Authorization: `Bearer ${accessToken}`,
           'Content-Type': 'text/plain',
         },
       }
     );
 
-    res.json(igdbResponse.data);
+    const games = igdbResponse.data;
+
+    res.json({
+      results: games,
+    });
   } catch (error) {
     console.error('Error fetching data from IGDB:', error.response?.data || error.message);
     res.status(500).json({ message: 'Failed to fetch data from IGDB.' });
