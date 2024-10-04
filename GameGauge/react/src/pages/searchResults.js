@@ -34,7 +34,7 @@ function SearchResults() {
 
   return (
     <div className="search-results-page">
-      <h1>Showing matches for "{searchQuery}"</h1>
+      <h1 className="results-header">Showing matches for "{searchQuery}"</h1>
 
       {searchResults.length === 0 ? (
         <p>No games found for your search.</p>

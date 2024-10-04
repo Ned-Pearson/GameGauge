@@ -1,65 +1,81 @@
-/* Container and layout styling */
-.results-container {
+.search-results-page {
     padding: 20px;
-    max-width: 1200px;
+    max-width: 1000px;
     margin: 0 auto;
+    color: #e5e5e5;
   }
   
-  .results-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    grid-gap: 20px;
-  }
-  
-  h2 {
+  .results-header {
+    font-size: 2rem;
     margin-bottom: 20px;
+    font-weight: bold;
+    border-bottom: 1px solid #444;
+    padding-bottom: 10px;
   }
   
-  /* Individual game card */
-  .game-card {
+  .search-results-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .search-result-item {
+    margin-bottom: 30px;
+  }
+  
+  .search-result-box {
     display: flex;
     background-color: #1c1c1e;
-    color: white;
     border-radius: 10px;
     overflow: hidden;
     border: 1px solid #333;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  /* Image styling */
-  .game-cover {
-    width: 100px;
-    height: auto;
-    object-fit: cover;
-  }
-  
-  /* Game info section */
-  .game-info {
     padding: 15px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+  }
+  
+  .search-result-cover {
+    width: 120px;
+    height: 160px;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 15px;
+  }
+  
+  .search-result-details {
+    flex: 1;
   }
   
   .game-title {
-    font-size: 1.2em;
+    font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 10px;
   }
   
-  .release-date {
-    font-size: 0.9em;
+  .game-release,
+  .game-studio {
+    font-size: 1rem;
     color: #888;
   }
   
-  .studio-name {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 5px;
+  .game-summary {
+    font-size: 1rem;
+    margin-top: 10px;
   }
   
-  .game-summary {
-    font-size: 0.9em;
-    margin-top: 10px;
+  .show-more-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 1.2rem;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .show-more-button:hover {
+    background-color: #0056b3;
   }
   
