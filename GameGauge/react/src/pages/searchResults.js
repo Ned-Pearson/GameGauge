@@ -22,10 +22,11 @@ function SearchResults() {
     setLoading(false);
   };
 
-  // Fetch results when component mounts or the limit changes
+  // Fetch results when component mounts or the searchQuery or limit changes
   useEffect(() => {
+    setLimit(12); // Reset the limit to initial value when a new search is made
     fetchResults();
-  }, [limit]); // Re-fetch when limit increases
+  }, [searchQuery, limit]); // Re-fetch when searchQuery or limit changes
 
   // Handle "Show More" button click
   const handleShowMore = () => {
