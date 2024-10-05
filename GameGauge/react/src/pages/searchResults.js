@@ -10,6 +10,7 @@ function SearchResults() {
   const [limit, setLimit] = useState(12); // Start with an initial limit of 12
   const [loading, setLoading] = useState(false);
   const [isFetchingMore, setIsFetchingMore] = useState(false); // New state for fetching more results
+  const [queryChanged, setQueryChanged] = useState(false); // New flag to detect if the query has changed
 
   // Function to fetch the results from the backend
   const fetchResults = async () => {
@@ -24,12 +25,20 @@ function SearchResults() {
     setLoading(false); // Hide loading indicator after fetching
   };
 
-  // Fetch results when component mounts or the searchQuery or limit changes
+  // Listen for changes in searchQuery to reset the limit and trigger the queryChanged flag
   useEffect(() => {
     setLimit(12); // Reset the limit to the initial value when a new search is made
-    setSearchResults([]); // Clear the old search results while loading new ones
-    fetchResults();
+    setQueryChanged(true); // Set queryChanged flag to true
   }, [searchQuery]);
+
+  // Fetch results when the limit changes (after resetting limit and when queryChanged is true)
+  useEffect(() => {
+    if (queryChanged) {
+      setSearchResults([]); // Clear the old search results while loading new ones
+      fetchResults(); // Fetch the new results
+      setQueryChanged(false); // Reset the flag after fetching
+    }
+  }, [limit, queryChanged]);
 
   // Function to fetch more results (incremental loading)
   const fetchMoreResults = async () => {
