@@ -146,3 +146,12 @@
     }
   }
   
+  .game-genres, .game-platforms {
+    font-size: 1.1rem;
+    margin: 10px 0;
+  }
+  
+  .game-genres strong, .game-platforms strong {
+    color: #a5a5a5;
+  }
+  

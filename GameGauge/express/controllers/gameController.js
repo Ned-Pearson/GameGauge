@@ -74,7 +74,7 @@ const getGameById = async (req, res) => {
 
     const response = await axios.post(
       'https://api.igdb.com/v4/games',
-      `fields name, summary, first_release_date, involved_companies.company.name, cover.url, artworks.url; where id = ${gameId};`,
+      `fields name, summary, genres.name, platforms.name, first_release_date, involved_companies.company.name, cover.url, artworks.url; where id = ${gameId};`,
       {
         headers: {
           'Client-ID': process.env.IGDB_CLIENT_ID,

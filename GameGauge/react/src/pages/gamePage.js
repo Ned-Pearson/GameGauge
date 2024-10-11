@@ -42,6 +42,18 @@ function GameDetails() {
         <p className="game-studio">{game.involved_companies?.[0]?.company?.name || 'Unknown Studio'}</p>
         <p className="game-summary">{game.summary || 'No summary available.'}</p>
 
+        {/* Genres */}
+        <p className="game-genres">
+          <strong>Genres: </strong>
+          {game.genres ? game.genres.map(genre => genre.name).join(', ') : 'N/A'}
+        </p>
+
+        {/* Platforms */}
+        <p className="game-platforms">
+          <strong>Platforms: </strong>
+          {game.platforms ? game.platforms.map(platform => platform.name).join(', ') : 'N/A'}
+        </p>
+
         {/* Placeholder for rating, review, and log */}
         <div className="game-actions">
           <button className="rate-button">Rate</button>
