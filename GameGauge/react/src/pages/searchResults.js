@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, Link } from 'react-router-dom'; // Import Link for navigation
+import { useLocation, Link } from 'react-router-dom';
 import axios from 'axios';
 import './searchResults.css';
 
