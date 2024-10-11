@@ -77,9 +77,16 @@
   color: #888;
 }
 
+/* Updated Summary container */
 .game-summary {
   font-size: 1rem;
   margin-top: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit summary to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
 }
 
 /* Show More button styling */
