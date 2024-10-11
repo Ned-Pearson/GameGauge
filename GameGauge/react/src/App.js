@@ -8,6 +8,7 @@ import Signup from './pages/signup';
 import Signin from './pages/signin';
 import SearchResults from './pages/searchResults';
 import { AuthProvider } from './context/authContext';
+import GamePage from './pages/gamePage';
 
 
 function App() {
@@ -29,6 +30,10 @@ function App() {
           <Routes>
             <Route path="/search-results" element={<SearchResults />} />
           </Routes>
+          <Routes>
+            <Route path="/game/:id" element={<GamePage />} />
+          </Routes>
+          
         </div>
         <Footer /> {/* Needs expansion */}
       </Router>

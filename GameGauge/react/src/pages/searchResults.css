@@ -1,135 +1,162 @@
+/* Search Results Page Styles */
 .search-results-page {
-    padding: 20px;
-    max-width: 1000px;
-    margin: 0 auto;
-    color: #e5e5e5;
-  }
-  
-  .results-header {
-    font-size: 2rem;
-    margin-bottom: 20px;
-    font-weight: bold;
-    border-bottom: 1px solid #444;
-    padding-bottom: 10px;
-  }
-  
-  .search-results-list {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-  }
-  
-  .search-result-item {
-    margin-bottom: 30px;
-  }
-  
-  .search-result-box {
-    display: flex;
-    background-color: #1c1c1e;
-    border-radius: 10px;
-    overflow: hidden;
-    border: 1px solid #333;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-  }
-  
-  .search-result-cover {
-    width: 120px;
-    height: 160px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin-right: 15px;
-  }
-  
-  .search-result-details {
-    flex: 1;
-  }
-  
-  .game-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .game-release,
-  .game-studio {
-    font-size: 1rem;
-    color: #888;
-  }
-  
-  .game-summary {
-    font-size: 1rem;
-    margin-top: 10px;
-  }
-  
-  .show-more-button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 1.2rem;
-    color: #fff;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 20px;
-  }
-  
-  .show-more-button:hover {
-    background-color: #0056b3;
-  }
-  
-  /* Center the loading container */
-  .loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 200px; /* Adjust height as needed */
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #555;
-  }
+  padding: 20px;
+  max-width: 1000px;
+  margin: 0 auto;
+  color: #e5e5e5;
+}
 
-  /* Add an animated spinner */
-  .spinner {
-    border: 5px solid #f3f3f3; /* Light grey */
-    border-top: 5px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-    margin-bottom: 10px;
-  }
+/* Results Header */
+.results-header {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: bold;
+  border-bottom: 1px solid #444;
+  padding-bottom: 10px;
+}
 
-  /* Animation for the spinner */
-  @keyframes spin {
-    0% {
+/* Search Results List */
+.search-results-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each Search Result Item */
+.search-result-item {
+  margin-bottom: 30px;
+}
+
+/* Make the entire card clickable, and remove default hyperlink styles */
+.search-result-link {
+  text-decoration: none;
+  color: inherit; /* Inherit the color from the parent element */
+}
+
+/* Search Result Box Styling */
+.search-result-box {
+  display: flex;
+  background-color: #1c1c1e;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #333;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Add a hover effect to make the card feel interactive */
+.search-result-box:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Image styling for game covers */
+.search-result-cover {
+  width: 120px;
+  height: 160px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-right: 15px;
+}
+
+/* Game details styling */
+.search-result-details {
+  flex: 1;
+}
+
+.game-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.game-release,
+.game-studio {
+  font-size: 1rem;
+  color: #888;
+}
+
+/* Updated Summary container */
+.game-summary {
+  font-size: 1rem;
+  margin-top: 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit summary to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+
+/* Show More button styling */
+.show-more-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  font-size: 1.2rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.show-more-button:hover {
+  background-color: #0056b3;
+}
+
+/* Loading container for initial results */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #555;
+}
+
+/* Spinner for initial loading */
+.spinner {
+  border: 5px solid #f3f3f3; /* Light grey */
+  border-top: 5px solid #3498db; /* Blue */
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin-bottom: 10px;
+}
+
+@keyframes spin {
+  0% {
       transform: rotate(0deg);
-    }
-    100% {
+  }
+  100% {
       transform: rotate(360deg);
-    }
   }
+}
 
-  /* Container for loading more results */
-  .loading-more-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-    font-size: 16px;
-    color: #555;
-  }
+/* Loading container for fetching more results */
+.loading-more-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  font-size: 16px;
+  color: #555;
+}
 
-  /* Smaller version of the spinner */
-  .small-spinner {
-    border: 4px solid #f3f3f3;
-    border-top: 4px solid #3498db;
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    animation: spin 1s linear infinite;
-    margin-right: 10px;
-  }
+/* Smaller spinner for fetching more results */
+.small-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  animation: spin 1s linear infinite;
+  margin-right: 10px;
+}

@@ -1,11 +1,8 @@
 TODO:
 
-- Individual game page - placeholder areas for logging
-
-  - Displays, Cover image, Game name, release year, studio, genres, platforms, "plot" summary, cover art. etc
-
 - Logging functionality - integrated into game page
 
+  - Update placeholder on gamepage to allow for logging
   - Saves users "status" (Want to play / backlog, playing, completed, dropped)
   - User can only log a game once, can edit previous log
   - Create an individual users logs page
@@ -13,8 +10,10 @@ TODO:
 
 - Review functionality - Similar to log but includes rating and review text
 
+  - Update placeholder on gamepage to allow for logging
   - Doesnt have a status (assumes games rated and reviewed after completion)
   - Individual users reviews page
+  - Display average rating for a game on game page
 
 - User following functionality
 
@@ -32,6 +31,3 @@ TODO:
 
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
-  - Refactor code and remove duplicate code and unnecessary code
-    (Best practise would be to do as I go I know but trying to get functionality done quickly to have something to show in job interviews)
-  - Clear .env file from the github history (Shouldnt have pushed in the first place)

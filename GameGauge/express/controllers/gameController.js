@@ -63,4 +63,36 @@ const searchGames = async (req, res) => {
   }
 };
 
-module.exports = { searchGames };
+const getGameById = async (req, res) => {
+  const { gameId } = req.body;
+  if (!gameId) {
+    return res.status(400).json({ message: 'Game ID is required.' });
+  }
+
+  try {
+    const accessToken = await getAccessToken();  
+
+    const response = await axios.post(
+      'https://api.igdb.com/v4/games',
+      `fields name, summary, genres.name, platforms.name, first_release_date, involved_companies.company.name, cover.url, artworks.url; where id = ${gameId};`,
+      {
+        headers: {
+          'Client-ID': process.env.IGDB_CLIENT_ID,
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'text/plain',
+        },
+      }
+    );
+
+    if (response.data.length === 0) {
+      return res.status(404).json({ message: 'Game not found.' });
+    }
+
+    res.json({ game: response.data[0] });
+  } catch (error) {
+    console.error('Error fetching game details from IGDB:', error.response?.data || error.message);
+    res.status(500).json({ message: 'Failed to fetch game details from IGDB.' });
+  }
+};
+
+module.exports = { searchGames, getGameById };

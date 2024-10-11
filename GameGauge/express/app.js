@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser'); // Import cookie-parser
 const authRoutes = require('./routes/authRoutes');  // Import your auth routes
-const searchRoutes = require('./routes/searchRoutes'); // Import your search routes
+const searchRoutes = require('./routes/gameRoutes'); // Import your search routes
 
 const app = express();
 
