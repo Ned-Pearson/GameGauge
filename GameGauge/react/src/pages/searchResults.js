@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom'; // Import Link for navigation
 import axios from 'axios';
 import './searchResults.css';
 
@@ -70,19 +70,21 @@ function SearchResults() {
           <ul className="search-results-list">
             {searchResults.map((game) => (
               <li key={game.id} className="search-result-item">
-                <div className="search-result-box">
-                  <img
-                    src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/90x120'}
-                    alt={game.name}
-                    className="search-result-cover"
-                  />
-                  <div className="search-result-details">
-                    <h2 className="game-title">{game.name}</h2>
-                    <p className="game-release">{new Date(game.first_release_date * 1000).getFullYear() || 'N/A'}</p>
-                    <p className="game-studio">{game.involved_companies?.[0]?.company?.name || 'Unknown Studio'}</p>
-                    <p className="game-summary">{game.summary ? `${game.summary}` : 'No summary available.'}</p>
+                <Link to={`/game/${game.id}`}>
+                  <div className="search-result-box">
+                    <img
+                      src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/90x120'}
+                      alt={game.name}
+                      className="search-result-cover"
+                    />
+                    <div className="search-result-details">
+                      <h2 className="game-title">{game.name}</h2>
+                      <p className="game-release">{new Date(game.first_release_date * 1000).getFullYear() || 'N/A'}</p>
+                      <p className="game-studio">{game.involved_companies?.[0]?.company?.name || 'Unknown Studio'}</p>
+                      <p className="game-summary">{game.summary ? `${game.summary}` : 'No summary available.'}</p>
+                    </div>
                   </div>
-                </div>
+                </Link>
               </li>
             ))}
           </ul>
