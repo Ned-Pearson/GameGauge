@@ -58,7 +58,6 @@ function SearchResults() {
       <h1 className="results-header">Showing matches for "{searchQuery}"</h1>
 
       {loading ? (
-        // Display a styled loading message
         <div className="loading-container">
           <div className="spinner"></div>
           <p>Loading search results...</p>
@@ -70,7 +69,7 @@ function SearchResults() {
           <ul className="search-results-list">
             {searchResults.map((game) => (
               <li key={game.id} className="search-result-item">
-                <Link to={`/game/${game.id}`}>
+                <Link to={`/game/${game.id}`} className="search-result-link">
                   <div className="search-result-box">
                     <img
                       src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/90x120'}
