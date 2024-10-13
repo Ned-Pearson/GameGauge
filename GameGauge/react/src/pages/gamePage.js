@@ -9,6 +9,7 @@ function GameDetails() {
   const { id } = useParams(); // This retrieves the game's id from the URL
   const [game, setGame] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
 
   useEffect(() => {
     const fetchGameDetails = async () => {
