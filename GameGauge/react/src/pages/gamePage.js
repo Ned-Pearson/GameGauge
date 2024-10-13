@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './gamePage.css';
+import LogButton from '../components/logButton';
+import { isAuthenticated } from '../utils/auth';
 
 function GameDetails() {
   const { id } = useParams(); // This retrieves the game's id from the URL
@@ -20,10 +22,16 @@ function GameDetails() {
     };
 
     fetchGameDetails();
+    setUserLoggedIn(isAuthenticated());
   }, [id]);
 
   if (loading) {
-    return <div className="loading-container"><div className="spinner"></div><p>Loading game details...</p></div>;
+    return (
+      <div className="loading-container">
+        <div className="spinner"></div>
+        <p>Loading game details...</p>
+      </div>
+    );
   }
 
   if (!game) {
@@ -34,7 +42,10 @@ function GameDetails() {
     <div className="game-details-page">
       {/* Main artwork or cover image */}
       <div className="game-cover-art">
-        <img src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/400x600'} alt={game.name} />
+        <img
+          src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/400x600'}
+          alt={game.name}
+        />
       </div>
       <div className="game-details">
         <h1 className="game-title">{game.name}</h1>
@@ -54,11 +65,11 @@ function GameDetails() {
           {game.platforms ? game.platforms.map(platform => platform.name).join(', ') : 'N/A'}
         </p>
 
-        {/* Placeholder for rating, review, and log */}
+        {/* Rating, Review, and Log */}
         <div className="game-actions">
           <button className="rate-button">Rate</button>
           <button className="review-button">Review</button>
-          <button className="log-button">Log</button>
+          <LogButton game={game} />
         </div>
       </div>
     </div>
