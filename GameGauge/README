@@ -2,11 +2,9 @@ TODO:
 
 - Logging functionality - integrated into game page
 
-  - Update placeholder on gamepage to allow for logging
-  - Saves users "status" (Want to play / backlog, playing, completed, dropped)
-  - User can only log a game once, can edit previous log
   - Create an individual users logs page
     - Displays all of a users logs
+  - Beautify logging functionality on game page (after logs page)
 
 - Review functionality - Similar to log but includes rating and review text
 
