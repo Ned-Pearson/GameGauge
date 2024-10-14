@@ -47,7 +47,7 @@ const LogButton = ({ game }) => {
         await API.post('/logs', {
           gameId: game.id,
           gameName: game.name,
-          imageUrl: game.cover ? `https:${game.cover.url}` : '',
+          imageUrl: game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : '', // Use higher resolution
           status: newStatus,
         });
         setStatus(newStatus);
