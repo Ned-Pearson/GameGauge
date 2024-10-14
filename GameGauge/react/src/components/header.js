@@ -64,7 +64,7 @@ function Header() {
               <span className="down-arrow">▼</span>
               {isDropdownOpen && (
                 <div className="dropdown-menu">
-                  <div className="dropdown-item">Profile</div>
+                  <Link to="/profile" >Profile</Link>
                   <div className="dropdown-item">Settings</div>
                   <div className="dropdown-item" onClick={handleLogout}>Logout</div>
                 </div>
