@@ -91,4 +91,23 @@ const deleteLogStatus = async (req, res) => {
   }
 };
 
-module.exports = { setLogStatus, getLogStatus, deleteLogStatus };
+const getAllLogs = async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const [rows] = await db.execute(
+      `SELECT game_id, game_name, image_url, status, log_date 
+       FROM logs 
+       WHERE user_id = ? 
+       ORDER BY log_date DESC`,
+      [userId]
+    );
+
+    res.json({ logs: rows });
+  } catch (error) {
+    console.error('Error fetching all logs:', error);
+    res.status(500).json({ message: 'Failed to fetch logs.' });
+  }
+};
+
+module.exports = { setLogStatus, getLogStatus, deleteLogStatus, getAllLogs };
