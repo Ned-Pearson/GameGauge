@@ -35,7 +35,7 @@ function App() {
             <Route path="/game/:id" element={<GamePage />} />
           </Routes>
           <Routes>
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/:username" element={<Profile />} />
           </Routes>
           
         </div>

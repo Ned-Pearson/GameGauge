@@ -110,4 +110,37 @@ const getAllLogs = async (req, res) => {
   }
 };
 
-module.exports = { setLogStatus, getLogStatus, deleteLogStatus, getAllLogs };
+const getLogsByUsername = async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    // First, get the userId based on the username
+    const [userRows] = await db.execute(
+      'SELECT id FROM users WHERE username = ?',
+      [username]
+    );
+
+    if (userRows.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const userId = userRows[0].id; 
+
+    // Now, get the logs for that userId
+    const [userLogs] = await db.execute(
+      'SELECT * FROM logs WHERE user_id = ?',
+      [userId]
+    );
+
+    if (userLogs.length === 0) {
+      return res.status(404).json({ message: 'No logs found for this user.' });
+    }
+
+    res.json({ logs: userLogs });
+  } catch (err) {
+    console.error('Error fetching logs:', err);
+    res.status(500).json({ message: 'Error fetching logs.' });
+  }
+};
+
+module.exports = { setLogStatus, getLogStatus, deleteLogStatus, getAllLogs, getLogsByUsername };

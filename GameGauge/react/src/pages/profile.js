@@ -1,18 +1,14 @@
 import React, { useContext, useEffect, useState } from 'react';
 import API from '../utils/axios';
+import { useParams, Link } from 'react-router-dom'; // Import to get the dynamic URL param
 import { AuthContext } from '../context/authContext';
 import GameLog from '../components/gameLog';
-import './profile.css';
+import './profile.css'; 
 
 const Profile = () => {
-  const { auth } = useContext(AuthContext);
-  const [logs, setLogs] = useState({
-    completed: [],
-    playing: [],
-    wantToPlay: [],
-    backlog: [],
-    dropped: [],
-  });
+  const { username } = useParams(); // Get the username from the URL
+  const { auth } = useContext(AuthContext); // Get authentication details
+  const [logs, setLogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
@@ -20,21 +16,8 @@ const Profile = () => {
   useEffect(() => {
     const fetchLogs = async () => {
       try {
-        const response = await API.get('/logs', {
-          headers: { Authorization: `Bearer ${auth.token}` },
-        });
-        const logsData = response.data.logs;
-
-        // Group logs by their status
-        const groupedLogs = {
-          completed: logsData.filter(log => log.status === 'completed'),
-          playing: logsData.filter(log => log.status === 'playing'),
-          wantToPlay: logsData.filter(log => log.status === 'want to play'),
-          backlog: logsData.filter(log => log.status === 'backlog'),
-          dropped: logsData.filter(log => log.status === 'dropped'),
-        };
-
-        setLogs(groupedLogs);
+        const response = await API.get(`/logs/user/${username}`);
+        setLogs(response.data.logs);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching logs:', err);
@@ -43,110 +26,120 @@ const Profile = () => {
       }
     };
 
-    if (auth.token) {
-      fetchLogs();
-    } else {
-      setLoading(false);
-    }
-  }, [auth.token]);
+    fetchLogs();
+  }, [username]);
+
+  const isOwner = auth?.username === username; // Check if the logged-in user is the profile owner
+
+  const logSections = {
+    completed: [],
+    playing: [],
+    wantToPlay: [],
+    backlog: [],
+    dropped: [],
+  };
+
+  // Organize logs into sections based on status
+  logs.forEach((log) => {
+    if (log.status === 'completed') logSections.completed.push(log);
+    else if (log.status === 'playing') logSections.playing.push(log);
+    else if (log.status === 'want to play') logSections.wantToPlay.push(log);
+    else if (log.status === 'backlog') logSections.backlog.push(log);
+    else if (log.status === 'dropped') logSections.dropped.push(log);
+  });
 
   if (loading) {
-    return <div className="profile-page"><p>Loading your logs...</p></div>;
+    return <div className="profile-page"><p>Loading logs...</p></div>;
   }
 
   if (error) {
-    return <div className="profile-page"><p>Error loading your logs. Please try again later.</p></div>;
+    return <div className="profile-page"><p>Error loading logs. Please try again later.</p></div>;
   }
 
   return (
     <div className="profile-page">
-      <h1>{auth.username}'s Profile</h1>
-      
-      {/* Status Navigation Bar */}
-      <div className="status-nav">
+      <h1>{username}'s Profile</h1>
+
+      {/* Show "Edit Profile" button only if the logged-in user is viewing their own profile */}
+      {isOwner && <button className="edit-profile-button">Edit Profile</button>}
+
+      <div className="status-navigation">
         <a href="#completed">Completed</a>
         <a href="#playing">Playing</a>
-        <a href="#wantToPlay">Want to Play</a>
+        <a href="#want-to-play">Want to Play</a>
         <a href="#backlog">Backlog</a>
         <a href="#dropped">Dropped</a>
       </div>
 
-      <h2>Your Logged Games</h2>
-      {Object.values(logs).every(section => section.length === 0) ? (
-        <p>You have not logged any games yet.</p>
-      ) : (
-        <div>
-          {/* Completed Section */}
-          <div id="completed" className="status-section">
-            <h2>Completed</h2>
-            <div className="logs-container">
-              {logs.completed.length > 0 ? (
-                logs.completed.map((log) => (
-                  <GameLog key={log.game_id} log={log} />
-                ))
-              ) : (
-                <p>No completed games.</p>
-              )}
-            </div>
+      {/* Completed Games */}
+      <section id="completed">
+        <h2>Completed Games</h2>
+        {logSections.completed.length > 0 ? (
+          <div className="logs-container">
+            {logSections.completed.map((log) => (
+              <GameLog key={log.game_id} log={log} />
+            ))}
           </div>
+        ) : (
+          <p>No completed games yet.</p>
+        )}
+      </section>
 
-          {/* Playing Section */}
-          <div id="playing" className="status-section">
-            <h2>Playing</h2>
-            <div className="logs-container">
-              {logs.playing.length > 0 ? (
-                logs.playing.map((log) => (
-                  <GameLog key={log.game_id} log={log} />
-                ))
-              ) : (
-                <p>Not currently playing any games.</p>
-              )}
-            </div>
+      {/* Playing Games */}
+      <section id="playing">
+        <h2>Playing</h2>
+        {logSections.playing.length > 0 ? (
+          <div className="logs-container">
+            {logSections.playing.map((log) => (
+              <GameLog key={log.game_id} log={log} />
+            ))}
           </div>
+        ) : (
+          <p>Not playing any games currently.</p>
+        )}
+      </section>
 
-          {/* Want to Play Section */}
-          <div id="wantToPlay" className="status-section">
-            <h2>Want to Play</h2>
-            <div className="logs-container">
-              {logs.wantToPlay.length > 0 ? (
-                logs.wantToPlay.map((log) => (
-                  <GameLog key={log.game_id} log={log} />
-                ))
-              ) : (
-                <p>No games in want to play list.</p>
-              )}
-            </div>
+      {/* Want to Play Games */}
+      <section id="want-to-play">
+        <h2>Want to Play</h2>
+        {logSections.wantToPlay.length > 0 ? (
+          <div className="logs-container">
+            {logSections.wantToPlay.map((log) => (
+              <GameLog key={log.game_id} log={log} />
+            ))}
           </div>
+        ) : (
+          <p>No games in the "Want to Play" list.</p>
+        )}
+      </section>
 
-          {/* Backlog Section */}
-          <div id="backlog" className="status-section">
-            <h2>Backlog</h2>
-            <div className="logs-container">
-              {logs.backlog.length > 0 ? (
-                logs.backlog.map((log) => (
-                  <GameLog key={log.game_id} log={log} />
-                ))
-              ) : (
-                <p>No backlog games yet.</p>
-              )}
-            </div>
+      {/* Backlog Games */}
+      <section id="backlog">
+        <h2>Backlog</h2>
+        {logSections.backlog.length > 0 ? (
+          <div className="logs-container">
+            {logSections.backlog.map((log) => (
+              <GameLog key={log.game_id} log={log} />
+            ))}
           </div>
+        ) : (
+          <p>No games in the backlog.</p>
+        )}
+      </section>
 
-          {/* Dropped Section */}
-          <div id="dropped" className="status-section">
-            <h2>Dropped</h2>
-            <div className="logs-container">
-              {logs.dropped.length > 0 ? (
-                logs.dropped.map((log) => (
-                  <GameLog key={log.game_id} log={log} />
-                ))
-              ) : (
-                <p>No games dropped yet.</p>
-              )}
-            </div>
+      {/* Dropped Games */}
+      <section id="dropped">
+        <h2>Dropped</h2>
+        {logSections.dropped.length > 0 ? (
+          <div className="logs-container">
+            {logSections.dropped.map((log) => (
+              <GameLog key={log.game_id} log={log} />
+            ))}
           </div>
-        </div>
-      )}
+        ) : (
+          <p>No games dropped.</p>
+        )}
+      </section>
     </div>
   );
 };
