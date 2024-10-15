@@ -61,7 +61,7 @@ const Profile = () => {
       <h1>{username}'s Profile</h1>
 
       {/* Show "Edit Profile" button only if the logged-in user is viewing their own profile */}
-      {isOwner && <button className="edit-profile-button">Edit Profile</button>}
+      {isOwner && <button className="edit-profile-button">Edit Profile</button>} {/* Placeholder button */}
 
       <div className="status-navigation">
         <a href="#completed">Completed</a>
