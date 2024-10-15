@@ -143,4 +143,34 @@ const getLogsByUsername = async (req, res) => {
   }
 };
 
-module.exports = { setLogStatus, getLogStatus, deleteLogStatus, getAllLogs, getLogsByUsername };
+// Get log counts for a game
+const getLogCounts = async (req, res) => {
+  const { gameId } = req.params;
+  
+  try {
+    // Count how many users have completed the game
+    const [completedCount] = await db.query(`
+      SELECT COUNT(*) AS completedCount
+      FROM logs
+      WHERE game_Id = ? AND status = 'Completed'
+    `, [gameId]);
+
+    // Count how many users are playing the game
+    const [playingCount] = await db.query(`
+      SELECT COUNT(*) AS playingCount
+      FROM logs
+      WHERE game_Id = ? AND status = 'Playing'
+    `, [gameId]);
+
+    // Send counts back to frontend
+    res.status(200).json({
+      completedCount: completedCount[0].completedCount,
+      playingCount: playingCount[0].playingCount
+    });
+  } catch (err) {
+    console.error('Error fetching log counts:', err);
+    res.status(500).json({ error: 'Failed to fetch log counts' });
+  }
+};
+
+module.exports = { setLogStatus, getLogStatus, deleteLogStatus, getAllLogs, getLogsByUsername, getLogCounts };
