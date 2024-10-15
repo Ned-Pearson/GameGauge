@@ -64,7 +64,7 @@ function Header() {
               <span className="down-arrow">▼</span>
               {isDropdownOpen && (
                 <div className="dropdown-menu">
-                  <Link to={`/${auth.username}`} className="dropdown-item">Profile</Link> {/* TODO Fix Styling */}
+                  <Link to={`/user/${auth.username}`} className="dropdown-item">Profile</Link> {/* TODO Fix Styling */}
                   <div className="dropdown-item">Settings</div>
                   <div className="dropdown-item" onClick={handleLogout}>Logout</div>
                 </div>
