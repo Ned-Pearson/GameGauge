@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './gamePage.css';
 import LogButton from '../components/logButton';
+import ReviewButton from '../components/reviewButton';
 import { isAuthenticated } from '../utils/auth';
 
 function GameDetails() {
@@ -85,7 +86,7 @@ function GameDetails() {
         {/* Rating, Review, and Log */}
         <div className="game-actions">
           <button className="rate-button">Rate</button>
-          <button className="review-button">Review</button>
+          <ReviewButton game={game} />
           <LogButton game={game} />
         </div>
       </div>
