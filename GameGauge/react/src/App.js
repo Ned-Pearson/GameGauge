@@ -9,6 +9,7 @@ import Signin from './pages/signin';
 import SearchResults from './pages/searchResults';
 import { AuthProvider } from './context/authContext';
 import GamePage from './pages/gamePage';
+import Profile from './pages/profile';
 
 
 function App() {
@@ -32,6 +33,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/game/:id" element={<GamePage />} />
+          </Routes>
+          <Routes>
+            <Route path="/user/:username" element={<Profile />} />
           </Routes>
           
         </div>

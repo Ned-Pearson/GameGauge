@@ -1,0 +1,21 @@
+.log-button-container {
+    position: relative; /* Ensure the dropdown is positioned relative to the container */
+  }
+  
+  .dropdown-menu {
+    position: absolute; /* This allows it to overlay the button */
+    background-color: white; /* Set background color for visibility */
+    border: 1px solid #ccc; /* Border for clarity */
+    z-index: 10; /* Ensure it is above other elements */
+    display: block; /* Ensure it is displayed */  
+  }
+  
+  .dropdown-item {
+    padding: 10px; /* Spacing for items */
+    cursor: pointer; /* Change cursor on hover */
+  }
+  
+  .dropdown-item:hover {
+    background-color: #f0f0f0; /* Highlight on hover */
+  }
+  

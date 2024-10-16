@@ -1,4 +1,4 @@
-import { jwtDecode } from 'jwt-decode'; // Fix this line
+import { jwtDecode } from 'jwt-decode'; 
 
 // Helper function to check if the user is authenticated
 export const isAuthenticated = () => {
@@ -6,7 +6,7 @@ export const isAuthenticated = () => {
 
   if (token) {
     try {
-      const decodedToken = jwtDecode(token);  // Decode the token
+      const decodedToken = jwtDecode(token); // Decode the token
 
       // Check if the token is expired
       if (decodedToken.exp * 1000 < Date.now()) {

@@ -2,15 +2,16 @@ require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser'); // Import cookie-parser
-const authRoutes = require('./routes/authRoutes');  // Import your auth routes
-const searchRoutes = require('./routes/gameRoutes'); // Import your search routes
+const cookieParser = require('cookie-parser');
+const authRoutes = require('./routes/authRoutes');
+const searchRoutes = require('./routes/gameRoutes');
+const logRoutes = require('./routes/logRoutes');
 
 const app = express();
 
 // Enable CORS to allow requests from the React app (modify the origin as needed)
 app.use(cors({
-  origin: 'http://localhost:3000',  // Modify this to match your frontend origin URL
+  origin: 'http://localhost:3000',  // Modify this to match your frontend origin URL when deploying
   credentials: true // Allows cookies and credentials
 }));
 
@@ -21,6 +22,7 @@ app.use(cookieParser());
 // Routes
 app.use('/api', authRoutes);    // Use the auth routes for API
 app.use('/api', searchRoutes);  // Use the search routes for API
+app.use('/api', logRoutes);
 
 // Root route for health check
 app.get('/', (req, res) => {

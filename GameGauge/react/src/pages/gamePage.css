@@ -1,157 +1,196 @@
-/* Basic styling reset */
+/* General styling */
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetica', sans-serif;
+  background-color: #181818;
+  color: #fff;
+}
+
+/* Loading spinner */
+.loading-container {
+  text-align: center;
+  padding: 50px;
+}
+
+.spinner {
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-left-color: #fff;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
   }
-  
-  body {
-    font-family: 'Helvetica', sans-serif;
-    background-color: #181818;
-    color: #fff;
-  }
-  
-  .loading-container {
-    text-align: center;
-    padding: 50px;
-  }
-  
-  .spinner {
-    border: 4px solid rgba(255, 255, 255, 0.2);
-    border-left-color: #fff;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    100% {
-      transform: rotate(360deg);
-    }
-  }
-  
+}
+
+/* Main game page styling */
+.game-details-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.game-cover-art {
+  width: 300px;
+  height: 450px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+}
+
+.game-cover-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Log Counts styling */
+.game-status-icons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.status-icon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 16px;
+  color: #ffd700; /* Icon color */
+  cursor: pointer;
+  position: relative;
+}
+
+.status-icon i {
+  font-size: 24px;
+}
+
+.status-icon span {
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.status-icon:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: -25px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 5px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+}
+
+.game-details {
+  text-align: center;
+  max-width: 800px;
+}
+
+.game-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.game-release-date,
+.game-studio {
+  font-size: 1rem;
+  color: #a5a5a5;
+  margin-bottom: 8px;
+}
+
+.game-summary {
+  font-size: 1.2rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.game-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.game-actions button {
+  padding: 10px 20px;
+  background-color: #3a3a3a;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.3s;
+  display: flex;
+  align-items: center;
+}
+
+.game-actions button:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.rate-button::before,
+.review-button::before,
+.log-button::before {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.rate-button::before {
+  content: '★'; /* Star for rating */
+  font-size: 1.2rem;
+  color: #ffd700; /* Gold star */
+}
+
+.review-button::before {
+  content: '✍'; /* Writing hand icon for review */
+  font-size: 1.2rem;
+  color: #fff;
+}
+
+.log-button::before {
+  content: '✔'; /* Checkmark for logging */
+  font-size: 1.2rem;
+  color: #00ff00; /* Green check */
+}
+
+@media (min-width: 768px) {
   .game-details-page {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
+    flex-direction: row;
   }
-  
+
   .game-cover-art {
-    width: 300px;
-    height: 450px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin-right: 40px;
+    margin-bottom: 0;
   }
-  
-  .game-cover-art img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 4px;
-  }
-  
+
   .game-details {
-    text-align: center;
-    max-width: 800px;
+    text-align: left;
   }
-  
-  .game-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .game-release-date,
-  .game-studio {
-    font-size: 1rem;
-    color: #a5a5a5;
-    margin-bottom: 8px;
-  }
-  
-  .game-summary {
-    font-size: 1.2rem;
-    line-height: 1.6;
-    margin-bottom: 20px;
-  }
-  
-  .game-actions {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .game-actions button {
-    padding: 10px 20px;
-    background-color: #3a3a3a;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s;
-    display: flex;
-    align-items: center;
-  }
-  
-  .game-actions button:hover {
-    background-color: #fff;
-    color: #000;
-  }
-  
-  .rate-button::before,
-  .review-button::before,
-  .log-button::before {
-    content: '';
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-right: 8px;
-  }
-  
-  .rate-button::before {
-    content: '★'; /* Star for rating */
-    font-size: 1.2rem;
-    color: #ffd700; /* Gold star */
-  }
-  
-  .review-button::before {
-    content: '✍'; /* Writing hand icon for review */
-    font-size: 1.2rem;
-    color: #fff;
-  }
-  
-  .log-button::before {
-    content: '✔'; /* Checkmark for logging */
-    font-size: 1.2rem;
-    color: #00ff00; /* Green check */
-  }
-  
-  @media (min-width: 768px) {
-    .game-details-page {
-      flex-direction: row;
-    }
-  
-    .game-cover-art {
-      margin-right: 40px;
-      margin-bottom: 0;
-    }
-  
-    .game-details {
-      text-align: left;
-    }
-  }
-  
-  .game-genres, .game-platforms {
-    font-size: 1.1rem;
-    margin: 10px 0;
-  }
-  
-  .game-genres strong, .game-platforms strong {
-    color: #a5a5a5;
-  }
-  
+}
+
+.game-genres, .game-platforms {
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+.game-genres strong, .game-platforms strong {
+  color: #a5a5a5;
+}
