@@ -2,8 +2,6 @@ TODO:
 
 - Review functionality - Similar to log but includes rating and review text
 
-  - Update placeholder on gamepage to allow for logging
-  - Doesnt have a status (assumes games rated and reviewed after completion)
   - Individual users reviews page
   - Display average rating for a game on game page
 
