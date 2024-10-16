@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './gamePage.css';
 import LogButton from '../components/logButton';
-import ReviewButton from '../components/reviewButton';
-import { isAuthenticated } from '../utils/auth';
+import RateReviewButton from '../components/rateReviewButton';
+// import { isAuthenticated } from '../utils/auth';
 
 function GameDetails() {
   const { id } = useParams(); // This retrieves the game's id from the URL
@@ -85,8 +85,7 @@ function GameDetails() {
 
         {/* Rating, Review, and Log */}
         <div className="game-actions">
-          <button className="rate-button">Rate</button>
-          <ReviewButton game={game} />
+          <RateReviewButton game={game} />
           <LogButton game={game} />
         </div>
       </div>
