@@ -26,8 +26,8 @@ const ReviewButton = ({ game }) => {
     try {
       const response = await API.get(`/reviews/${game.id}`);
       if (response.data.review) {
-        setReview(response.data.review.text);
-        setRating(response.data.review.rating); // Fetch and set rating if it exists
+        setReview(response.data.review.review_text);
+        setRating(response.data.review.rating);
       }
     } catch (error) {
       if (error.response && error.response.status === 404) {
@@ -56,13 +56,15 @@ const ReviewButton = ({ game }) => {
           gameName: game.name, // Pass game name
           imageUrl: game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : '',
           reviewText: review,
-          rating: rating 
+          rating: rating
         }, {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}` 
+            Authorization: `Bearer ${localStorage.getItem('token')}`
           }
         });
+  
         setMessage('Review submitted successfully!');
+        fetchCurrentReview(); // Refetch the review after submission
       } else {
         setMessage('Review cannot be empty!');
       }
