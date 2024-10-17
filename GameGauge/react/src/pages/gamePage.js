@@ -4,7 +4,7 @@ import axios from 'axios';
 import './gamePage.css';
 import LogButton from '../components/logButton';
 import RateReviewButton from '../components/rateReviewButton';
-// import { isAuthenticated } from '../utils/auth';
+import RatingChart from '../components/ratingChart';
 
 function GameDetails() {
   const { id } = useParams(); // This retrieves the game's id from the URL
@@ -18,13 +18,20 @@ function GameDetails() {
         const gameResponse = await axios.post('http://localhost:5000/api/game', { gameId: id });
         setGame(gameResponse.data.game);
 
+        // Debugging: Check the fetched game details
+        console.log('Fetched game details:', gameResponse.data.game);
+
         // Fetch log counts
         const logCountsResponse = await axios.get(`http://localhost:5000/api/logs/${id}/counts`);
         setLogCounts(logCountsResponse.data);
+
+        // Debugging: Check the fetched log counts
+        console.log('Fetched log counts:', logCountsResponse.data);
       } catch (error) {
         console.error('Error fetching game details or log counts:', error);
+      } finally {
+        setLoading(false); // Ensure loading is set to false in both success and error cases
       }
-      setLoading(false);
     };
 
     fetchGameDetails();
@@ -87,6 +94,8 @@ function GameDetails() {
         <div className="game-actions">
           <RateReviewButton game={game} />
           <LogButton game={game} />
+          {/* Position not final */}
+          <RatingChart gameId={id} />
         </div>
       </div>
     </div>
