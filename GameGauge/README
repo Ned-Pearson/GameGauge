@@ -3,7 +3,6 @@ TODO:
 - Review functionality - Similar to log but includes rating and review text
 
   - Individual users reviews page
-  - Display average rating for a game on game page
 
 - User following functionality
 
@@ -19,9 +18,11 @@ TODO:
 
 - Misc todos
 
+  - Fix authContext not supplying a new access token from the refresh token when the access token expires
   - Improve styling of game page
   - Improve styling of profile page
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
-  - Update games table to have a log count and rating count
-    - Display log count and rating count on game page
+  - Add a delete account feature to profile page
+  - Add a change password feature to profile page
+  - Make the user select search bar automatically when search bar is toggled open (avoids needing to click on it)
