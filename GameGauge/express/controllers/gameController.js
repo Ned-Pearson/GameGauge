@@ -1,4 +1,5 @@
 const axios = require('axios');
+const db = require('../config/db');
 
 let cachedAccessToken = null;
 let tokenExpiryTime = null;
@@ -95,4 +96,34 @@ const getGameById = async (req, res) => {
   }
 };
 
-module.exports = { searchGames, getGameById };
+const getRatingStats = async (req, res) => {
+  const { gameId } = req.params; // Get gameId from the URL
+  console.log('Received Game ID:', gameId); // Debugging log
+  
+  if (!gameId) {
+    console.error('Game ID is required.'); // Debugging log
+    return res.status(400).json({ message: 'Game ID is required.' });
+  }
+
+  try {
+    console.log('Querying ratings for game ID:', gameId); // Debugging log
+    const [rows] = await db.query('SELECT rating FROM reviews WHERE game_id = ?', [gameId]);
+
+    if (rows.length === 0) {
+      console.log('No ratings found for game ID:', gameId); // Debugging log
+      return res.json({ averageRating: 0, totalRatings: 0 }); // No ratings found
+    }
+
+    const ratings = rows.map(row => row.rating);
+    const totalRatings = ratings.length;
+    const averageRating = ratings.reduce((sum, rating) => sum + rating, 0) / totalRatings;
+
+    console.log('Calculated average rating:', averageRating, 'from', totalRatings, 'ratings.'); // Debugging log
+    res.json({ averageRating: averageRating.toFixed(1), totalRatings });
+  } catch (error) {
+    console.error('Error fetching rating stats:', error);
+    res.status(500).json({ message: 'Failed to fetch rating stats.' });
+  }
+};
+
+module.exports = { searchGames, getGameById, getRatingStats };
