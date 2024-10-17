@@ -10,6 +10,7 @@ function GameDetails() {
   const { id } = useParams(); // This retrieves the game's id from the URL
   const [game, setGame] = useState(null);
   const [logCounts, setLogCounts] = useState({ completedCount: 0, playingCount: 0 });
+  const [ratings, setRatings] = useState(null); // State to hold ratings
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,6 +28,13 @@ function GameDetails() {
 
         // Debugging: Check the fetched log counts
         console.log('Fetched log counts:', logCountsResponse.data);
+
+        // Fetch ratings for the game
+        const ratingsResponse = await axios.get(`http://localhost:5000/api/games/${id}/ratings`);
+        setRatings(ratingsResponse.data);
+
+        // Debugging: Check the fetched ratings
+        console.log('Fetched ratings:', ratingsResponse.data);
       } catch (error) {
         console.error('Error fetching game details or log counts:', error);
       } finally {
@@ -94,8 +102,15 @@ function GameDetails() {
         <div className="game-actions">
           <RateReviewButton game={game} />
           <LogButton game={game} />
-          {/* Position not final */}
-          <RatingChart gameId={id} />
+          {ratings && ratings.individualRatings ? (
+            <RatingChart
+              individualRatings={ratings.individualRatings}
+              averageRating={ratings.averageRating}
+              totalRatings={ratings.totalRatings}
+            />
+          ) : (
+            <p>No ratings available to display the chart.</p>
+          )}
         </div>
       </div>
     </div>

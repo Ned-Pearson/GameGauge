@@ -194,3 +194,18 @@ body {
 .game-genres strong, .game-platforms strong {
   color: #a5a5a5;
 }
+
+/* Rating chart styling */
+.rating-chart-container {
+  margin-top: 20px;
+}
+
+.rating-chart-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.chartjs-render-monitor {
+  max-width: 300px; 
+  margin: 0 auto; /* Center the chart */
+}

@@ -1,54 +1,67 @@
-import React, { useEffect, useState } from 'react';
-import API from '../utils/axios'; 
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
+import 'chart.js/auto'; // For Chart.js registration
 
-const RatingChart = ({ gameId }) => {
-  const [ratingData, setRatingData] = useState(null);
-  const [error, setError] = useState('');
-
-  const fetchRatingData = async () => {
-    try {
-      console.log('Fetching rating data for Game ID:', gameId); // Debugging log
-      const response = await API.get(`/games/${gameId}/ratings`);
-      console.log('Response received:', response.data); // Debugging log
-      setRatingData(response.data);
-    } catch (err) {
-      console.error('Failed to fetch rating data:', err); // Debugging log
-      setError('Failed to load rating data');
+const RatingChart = ({ individualRatings, averageRating, totalRatings }) => {
+  // Calculate rating frequencies (1-10) from individualRatings
+  const ratingFrequencies = Array(10).fill(0); // Initializing 10 bins for ratings from 1 to 10
+  individualRatings.forEach(rating => {
+    // Ensure we're only working with valid ratings between 1 and 10
+    if (rating >= 1 && rating <= 10) {
+      ratingFrequencies[rating - 1] += 1; // Increment frequency at the correct index
     }
+  });
+
+  // Log frequency calculation for debugging
+  console.log('Rating Frequencies:', ratingFrequencies);
+
+  const chartData = {
+    labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
+    datasets: [
+      {
+        label: 'Ratings',
+        data: ratingFrequencies, // Should now reflect the correct frequencies
+        backgroundColor: ratingFrequencies.map((_, idx) => {
+          // Assign cold-to-hot color based on rating
+          if (idx < 2) return 'blue';  // Ratings 1-2
+          if (idx < 4) return 'green'; // Ratings 3-4
+          if (idx < 6) return 'yellow'; // Ratings 5-6
+          if (idx < 8) return 'orange'; // Ratings 7-8
+          return 'red'; // Ratings 9-10
+        }),
+        hoverBackgroundColor: '#000', // Optional hover effect
+      },
+    ],
   };
 
-  useEffect(() => {
-    if (gameId) {
-      fetchRatingData();
-    } else {
-      console.error('No Game ID provided.'); // Debugging log
-    }
-  }, [gameId]);
+  console.log("Chart Data:", chartData); // Log chart data for debugging
 
-  if (error) {
-    return <div>{error}</div>;
-  }
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      tooltip: {
+        callbacks: {
+          label: (context) => `Count: ${context.raw}`,
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          stepSize: 1, // Ensure only whole numbers are displayed
+        },
+      },
+    },
+  };
 
-  // Handle cases where there are no ratings or only one rating
-  if (ratingData) {
-    const { averageRating, totalRatings } = ratingData;
-
-    console.log('Rating data:', ratingData); // Debugging log
-
-    if (totalRatings === 0) {
-      return <div>No ratings available for this game.</div>;
-    }
-
-    return (
-      <div>
-        <h3>Average Rating: {averageRating}</h3>
-        <p>Total Ratings: {totalRatings}</p>
-        {/* Add your chart rendering logic here (e.g., Chart.js) */}
-      </div>
-    );
-  }
-
-  return <p>Loading rating data...</p>;
+  return (
+    <div>
+      <h3>Average Rating: {averageRating}/10</h3>
+      <h4>Total Ratings: {totalRatings}</h4>
+      <Bar data={chartData} options={chartOptions} />
+    </div>
+  );
 };
 
 export default RatingChart;
