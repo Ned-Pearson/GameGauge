@@ -19,6 +19,7 @@ const authMiddleware = (req, res, next) => {
     req.user = decoded; // Ensure the token contains user information like id
     next();
   } catch (err) {
+    console.error('Token verification error:', err); // More detailed logging
     return res.status(403).json({ message: 'Invalid or expired token.' });
   }
 };

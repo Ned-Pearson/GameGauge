@@ -14,9 +14,8 @@ import Profile from './pages/profile';
 
 function App() {
   return (
-
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Header />
         <div className="main-content">
           <Routes>
@@ -40,8 +39,8 @@ function App() {
           
         </div>
         <Footer /> {/* Needs expansion */}
+      </AuthProvider>
       </Router>
-    </AuthProvider>
   );
 }
 
