@@ -7,10 +7,10 @@ import RateReviewButton from '../components/rateReviewButton';
 import RatingChart from '../components/ratingChart';
 
 function GameDetails() {
-  const { id } = useParams(); // This retrieves the game's id from the URL
+  const { id } = useParams(); 
   const [game, setGame] = useState(null);
   const [logCounts, setLogCounts] = useState({ completedCount: 0, playingCount: 0 });
-  const [ratings, setRatings] = useState(null); // State to hold ratings
+  const [ratings, setRatings] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,26 +19,15 @@ function GameDetails() {
         const gameResponse = await axios.post('http://localhost:5000/api/game', { gameId: id });
         setGame(gameResponse.data.game);
 
-        // Debugging: Check the fetched game details
-        console.log('Fetched game details:', gameResponse.data.game);
-
-        // Fetch log counts
         const logCountsResponse = await axios.get(`http://localhost:5000/api/logs/${id}/counts`);
         setLogCounts(logCountsResponse.data);
 
-        // Debugging: Check the fetched log counts
-        console.log('Fetched log counts:', logCountsResponse.data);
-
-        // Fetch ratings for the game
         const ratingsResponse = await axios.get(`http://localhost:5000/api/games/${id}/ratings`);
         setRatings(ratingsResponse.data);
-
-        // Debugging: Check the fetched ratings
-        console.log('Fetched ratings:', ratingsResponse.data);
       } catch (error) {
         console.error('Error fetching game details or log counts:', error);
       } finally {
-        setLoading(false); // Ensure loading is set to false in both success and error cases
+        setLoading(false);
       }
     };
 
@@ -60,14 +49,11 @@ function GameDetails() {
 
   return (
     <div className="game-details-page">
-      {/* Main artwork or cover image */}
       <div className="game-cover-art">
         <img
           src={game.cover ? `https:${game.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/400x600'}
           alt={game.name}
         />
-
-        {/* Log Counts under the cover */}
         <div className="game-status-icons">
           <div className="status-icon" title="Completed">
             <i className="fas fa-check-circle"></i>
@@ -86,19 +72,16 @@ function GameDetails() {
         <p className="game-studio">{game.involved_companies?.[0]?.company?.name || 'Unknown Studio'}</p>
         <p className="game-summary">{game.summary || 'No summary available.'}</p>
 
-        {/* Genres */}
         <p className="game-genres">
           <strong>Genres: </strong>
           {game.genres ? game.genres.map(genre => genre.name).join(', ') : 'N/A'}
         </p>
 
-        {/* Platforms */}
         <p className="game-platforms">
           <strong>Platforms: </strong>
           {game.platforms ? game.platforms.map(platform => platform.name).join(', ') : 'N/A'}
         </p>
 
-        {/* Rating, Review, and Log */}
         <div className="game-actions">
           <RateReviewButton game={game} />
           <LogButton game={game} />

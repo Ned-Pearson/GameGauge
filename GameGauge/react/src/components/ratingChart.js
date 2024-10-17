@@ -6,23 +6,18 @@ const RatingChart = ({ individualRatings, averageRating, totalRatings }) => {
   // Calculate rating frequencies (1-10) from individualRatings
   const ratingFrequencies = Array(10).fill(0); // Initializing 10 bins for ratings from 1 to 10
   individualRatings.forEach(rating => {
-    // Ensure we're only working with valid ratings between 1 and 10
     if (rating >= 1 && rating <= 10) {
       ratingFrequencies[rating - 1] += 1; // Increment frequency at the correct index
     }
   });
 
-  // Log frequency calculation for debugging
-  console.log('Rating Frequencies:', ratingFrequencies);
-
   const chartData = {
     labels: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'],
     datasets: [
       {
-        label: 'Ratings',
-        data: ratingFrequencies, // Should now reflect the correct frequencies
+        label: '', // Empty label to hide the legend
+        data: ratingFrequencies,
         backgroundColor: ratingFrequencies.map((_, idx) => {
-          // Assign cold-to-hot color based on rating
           if (idx < 2) return 'blue';  // Ratings 1-2
           if (idx < 4) return 'green'; // Ratings 3-4
           if (idx < 6) return 'yellow'; // Ratings 5-6
@@ -34,11 +29,12 @@ const RatingChart = ({ individualRatings, averageRating, totalRatings }) => {
     ],
   };
 
-  console.log("Chart Data:", chartData); // Log chart data for debugging
-
   const chartOptions = {
     responsive: true,
     plugins: {
+      legend: {
+        display: false, // Hide the legend
+      },
       tooltip: {
         callbacks: {
           label: (context) => `Count: ${context.raw}`,
@@ -46,10 +42,23 @@ const RatingChart = ({ individualRatings, averageRating, totalRatings }) => {
       },
     },
     scales: {
+      x: {
+        ticks: {
+            display : true, // Show x-axis labels (confusing when theres no values)
+        //  display: false, // Hide x-axis labels (1-10)
+        
+        },
+        grid: {
+          display: true, // left the grid lines for x-axis so the chart itself is easier to see (especially with no values)
+        },
+      },
       y: {
         beginAtZero: true,
         ticks: {
-          stepSize: 1, // Ensure only whole numbers are displayed
+          display: false, // Hide y-axis labels (0-maxcount)
+        },
+        grid: {
+          display: false, // Remove grid lines for y-axis
         },
       },
     },
