@@ -97,32 +97,34 @@ const getGameById = async (req, res) => {
 };
 
 const getRatingStats = async (req, res) => {
-  const { gameId } = req.params; // Get gameId from the URL
-  console.log('Received Game ID:', gameId); // Debugging log
-  
-  if (!gameId) {
-    console.error('Game ID is required.'); // Debugging log
-    return res.status(400).json({ message: 'Game ID is required.' });
-  }
-
   try {
-    console.log('Querying ratings for game ID:', gameId); // Debugging log
+    const { gameId } = req.params;
+
+    // Fetch ratings for the specific game
     const [rows] = await db.query('SELECT rating FROM reviews WHERE game_id = ?', [gameId]);
 
-    if (rows.length === 0) {
-      console.log('No ratings found for game ID:', gameId); // Debugging log
-      return res.json({ averageRating: 0, totalRatings: 0 }); // No ratings found
-    }
+    console.log('Raw ratings from database:', rows); // Log the raw ratings for debugging
 
-    const ratings = rows.map(row => row.rating);
-    const totalRatings = ratings.length;
-    const averageRating = ratings.reduce((sum, rating) => sum + rating, 0) / totalRatings;
+    // Extract ratings from the rows
+    const validRatings = rows.map(row => row.rating).filter(rating => rating !== null);
+    console.log('Filtered valid ratings:', validRatings); // Log filtered ratings
 
-    console.log('Calculated average rating:', averageRating, 'from', totalRatings, 'ratings.'); // Debugging log
-    res.json({ averageRating: averageRating.toFixed(1), totalRatings });
+    const totalRatings = validRatings.length;
+
+    // Calculate the sum of valid ratings
+    const sumRatings = validRatings.reduce((acc, curr) => acc + (curr || 0), 0); // Default to 0 if curr is null
+
+    // Calculate the average rating if totalRatings is not zero
+    const averageRating = totalRatings > 0 ? (sumRatings / totalRatings).toFixed(1) : '0.0'; // Return '0.0' if no ratings
+
+    res.status(200).json({
+      averageRating,
+      totalRatings,
+      individualRatings: validRatings, // Return filtered valid individual ratings
+    });
   } catch (error) {
     console.error('Error fetching rating stats:', error);
-    res.status(500).json({ message: 'Failed to fetch rating stats.' });
+    res.status(500).json({ error: 'Internal server error' });
   }
 };
 
