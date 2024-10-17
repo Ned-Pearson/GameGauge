@@ -75,14 +75,16 @@ const RateReviewButton = ({ game }) => {
   };
 
   const getBarColor = (currentRating, barIndex) => {
-    if (currentRating >= 1 && currentRating <= 3) {
-      return barIndex <= currentRating ? 'red-bar' : '';
-    } else if (currentRating >= 4 && currentRating <= 6) {
-      return barIndex <= currentRating ? 'orange-bar' : '';
-    } else if (currentRating >= 7 && currentRating <= 9) {
+    if (currentRating >= 1 && currentRating <= 2) {
+      return barIndex <= currentRating ? 'blue-bar' : '';
+    } else if (currentRating >= 3 && currentRating <= 4) {
       return barIndex <= currentRating ? 'green-bar' : '';
-    } else if (currentRating === 10) {
-      return barIndex <= currentRating ? 'purple-bar' : '';
+    } else if (currentRating >= 5 && currentRating <= 6) {
+      return barIndex <= currentRating ? 'yellow-bar' : '';
+    } else if (currentRating >= 7 && currentRating <= 8) {
+      return barIndex <= currentRating ? 'orange-bar' : '';
+    } else if (currentRating >= 9 && currentRating <= 10) {
+      return barIndex <= currentRating ? 'red-bar' : '';
     } else {
       return '';
     }
@@ -106,9 +108,12 @@ const RateReviewButton = ({ game }) => {
                 onMouseLeave={handleBarMouseLeave}
                 onClick={() => handleBarClick(index)}
                 style={{ height: `${(index + 1) * 10}%` }} // Dynamically set height for bars
-                />
+                >
+                  {/* Display number when hovering */}
+                  {hoverRating === index + 1 && <span className="rating-number">{index + 1}</span>}
+                </div>
             ))}
-            </div>
+          </div>
 
           {/* Review Textarea */}
           <textarea
