@@ -41,11 +41,11 @@ export const AuthProvider = ({ children }) => {
           }
         } catch (error) {
           console.error('Token verification failed', error);
-          logout();
+          logout(); 
         }
       }
     };
-    verifyToken();
+    // verifyToken(); //Commneted out for now as verify-token route is not implemented
   }, []);
 
   return (
