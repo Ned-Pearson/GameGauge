@@ -90,6 +90,10 @@ const RateReviewButton = ({ game }) => {
     }
   };
 
+  if (!isAuthenticated()) {
+    return <p></p>; // Return nothing if user is not authenticated (log button already displays a please login message)
+  }
+
   return (
     <div className="rate-review-container">
       <button onClick={toggleDropdown} className="rate-review-button">
