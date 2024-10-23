@@ -17,7 +17,32 @@ const Profile = () => {
     const fetchLogs = async () => {
       try {
         const response = await API.get(`/logs/user/${username}`);
-        setLogs(response.data.logs);
+        const logsWithReviews = await Promise.all(
+          response.data.logs.map(async (log) => {
+            try {
+              // Fetch the review for the specific game and user
+              const reviewResponse = await API.get(`/reviews/${log.game_id}/user/${username}`);
+              return {
+                ...log,
+                rating: reviewResponse.data.review?.rating || null, // Default to null if no rating
+                review_text: reviewResponse.data.review?.review_text || null, // Default to null if no review
+              };
+            } catch (error) {
+              // If review not found (404), handle it gracefully
+              if (error.response && error.response.status === 404) {
+                return {
+                  ...log,
+                  rating: null, // No rating
+                  review_text: null, // No review
+                };
+              } else {
+                console.error('Error fetching review:', error);
+                throw error; // Handle other errors (e.g., server errors)
+              }
+            }
+          })
+        );
+        setLogs(logsWithReviews);
         setLoading(false);
       } catch (err) {
         console.error('Error fetching logs:', err);
@@ -25,9 +50,9 @@ const Profile = () => {
         setLoading(false);
       }
     };
-
+  
     fetchLogs();
-  }, [username]);
+  }, [username]);    
 
   const isOwner = auth?.username === username; // Check if the logged-in user is the profile owner
 

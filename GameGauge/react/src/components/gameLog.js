@@ -18,6 +18,19 @@ const GameLog = ({ log }) => {
           </div>
         </div>
       </Link>
+      {/* Rating and Review Indicator */}
+      <div className="rating-review">
+        {log.rating !== null && (
+          <div className="rating">
+            <p>Rating: {log.rating}/10</p>
+          </div>
+        )}
+        {log.review_text && (
+          <div className="review-indicator">
+            <span className="review-icon">≡</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -29,6 +42,8 @@ GameLog.propTypes = {
     image_url: PropTypes.string.isRequired,
     status: PropTypes.string.isRequired,
     log_date: PropTypes.string.isRequired,
+    rating: PropTypes.number,  // Rating is optional
+    review_text: PropTypes.string, // Review text is optional
   }).isRequired,
 };
 

@@ -136,6 +136,34 @@ const getReviewsByUsername = async (req, res) => {
     }
 };
 
+// Get a specific user's review for a specific game
+const getUserGameReview = async (req, res) => {
+    const { gameId, username } = req.params;
+
+    try {
+        // Fetch userId based on username
+        const [userRows] = await db.execute('SELECT id FROM users WHERE username = ?', [username]);
+
+        if (userRows.length === 0) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        const userId = userRows[0].id;
+
+        // Now fetch the review for this gameId and userId
+        const [rows] = await db.execute('SELECT * FROM reviews WHERE user_id = ? AND game_id = ?', [userId, gameId]);
+
+        if (rows.length === 0) {
+            return res.status(404).json({ message: 'No review found for this game by this user.' });
+        }
+
+        res.json({ review: rows[0] });
+    } catch (error) {
+        console.error('Error fetching user review:', error);
+        res.status(500).json({ message: 'Failed to fetch user review.' });
+    }
+};
+
 // Get review counts for a game
 const getReviewCounts = async (req, res) => {
     const { gameId } = req.params;
@@ -156,4 +184,4 @@ const getReviewCounts = async (req, res) => {
     }
 };
 
-module.exports = { setReview, getReview, deleteReview, getAllReviews, getReviewsByUsername, getReviewCounts };
+module.exports = { setReview, getReview, deleteReview, getAllReviews, getReviewsByUsername, getUserGameReview, getReviewCounts };
