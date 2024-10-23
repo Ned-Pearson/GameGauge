@@ -3,6 +3,8 @@ TODO:
 - Review functionality - Similar to log but includes rating and review text
 
   - Individual users reviews page
+    - Similar to user logs page, just display all of the users reviews (containing text) in newest to oldest.
+  - Make rate/review button on game page conditional to being logged in
 
 - User following functionality
 
@@ -23,6 +25,9 @@ TODO:
   - Improve styling of profile page
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
-  - Add a delete account feature to profile page
-  - Add a change password feature to profile page
+  - Implement edit profile functionality
+    - Add a delete account feature to profile page
+    - Add a change password feature to profile page
+    - Add a change username feature
+    - Add a change email feature
   - Make the user select search bar automatically when search bar is toggled open (avoids needing to click on it)
