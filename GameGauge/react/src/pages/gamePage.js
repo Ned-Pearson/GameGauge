@@ -7,10 +7,11 @@ import RateReviewButton from '../components/rateReviewButton';
 import RatingChart from '../components/ratingChart';
 
 function GameDetails() {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [game, setGame] = useState(null);
   const [logCounts, setLogCounts] = useState({ completedCount: 0, playingCount: 0 });
-  const [ratings, setRatings] = useState(null); 
+  const [ratings, setRatings] = useState(null);
+  const [reviews, setReviews] = useState([]); // State for reviews
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -24,8 +25,12 @@ function GameDetails() {
 
         const ratingsResponse = await axios.get(`http://localhost:5000/api/games/${id}/ratings`);
         setRatings(ratingsResponse.data);
+
+        // Fetch reviews for the game
+        const reviewsResponse = await axios.get(`http://localhost:5000/api/games/${id}/reviews`);
+        setReviews(reviewsResponse.data.reviews);
       } catch (error) {
-        console.error('Error fetching game details or log counts:', error);
+        console.error('Error fetching game details, log counts, or reviews:', error);
       } finally {
         setLoading(false);
       }
@@ -93,6 +98,23 @@ function GameDetails() {
             />
           ) : (
             <p>No ratings available to display the chart.</p>
+          )}
+        </div>
+
+        <div className="recent-reviews">
+          <h2>Recent Reviews</h2>
+          {reviews.length > 0 ? (
+            <ul>
+              {reviews.map((review, index) => (
+                <li key={index} className="review-item">
+                  <p><strong>{review.username}</strong> rated: {review.rating || 'No rating given'}</p>
+                  <p>{review.review_text}</p>
+                  <p className="review-date">{new Date(review.created_at).toLocaleDateString()}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No reviews available for this game.</p>
           )}
         </div>
       </div>

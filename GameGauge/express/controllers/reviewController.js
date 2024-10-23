@@ -184,4 +184,34 @@ const getReviewCounts = async (req, res) => {
     }
 };
 
-module.exports = { setReview, getReview, deleteReview, getAllReviews, getReviewsByUsername, getUserGameReview, getReviewCounts };
+// Get all reviews for a specific game
+const getAllGameReviews = async (req, res) => {
+    const { gameId } = req.params;
+
+    try {
+        const [reviews] = await db.execute(
+            `SELECT reviews.review_text, reviews.rating, reviews.created_at, users.username
+            FROM reviews
+            JOIN users ON reviews.user_id = users.id
+            WHERE reviews.game_id = ? AND reviews.review_text IS NOT NULL AND reviews.review_text != "" 
+            ORDER BY reviews.created_at DESC`,
+            [gameId]
+        );
+
+        res.json({ reviews });
+    } catch (error) {
+        console.error('Error fetching game reviews:', error);
+        res.status(500).json({ message: 'Failed to fetch reviews for the game.' });
+    }
+};
+
+module.exports = { 
+    setReview, 
+    getReview, 
+    deleteReview, 
+    getAllReviews, 
+    getReviewsByUsername, 
+    getUserGameReview, 
+    getReviewCounts,
+    getAllGameReviews
+};
