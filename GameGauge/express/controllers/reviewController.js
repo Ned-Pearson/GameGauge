@@ -105,7 +105,6 @@ const getAllReviews = async (req, res) => {
 // Get reviews by username
 const getReviewsByUsername = async (req, res) => {
     const { username } = req.params;
-    const { sort } = req.query; // Get the optional sort parameter
 
     try {
         // Get userId based on username
@@ -120,21 +119,9 @@ const getReviewsByUsername = async (req, res) => {
 
         const userId = userRows[0].id;
 
-        // Default to newest to oldest
-        let orderByClause = 'ORDER BY created_at DESC'; 
-
-        // Modify the order by clause based on the sort query parameter
-        if (sort === 'oldest') {
-            orderByClause = 'ORDER BY created_at ASC'; // Oldest to newest
-        } else if (sort === 'highest-rating') {
-            orderByClause = 'ORDER BY rating DESC'; // Highest rating first
-        } else if (sort === 'lowest-rating') {
-            orderByClause = 'ORDER BY rating ASC'; // Lowest rating first
-        }
-
-        // Get reviews for that userId with the dynamic orderByClause
+        // Fetch all reviews for the user
         const [userReviews] = await db.execute(
-            `SELECT * FROM reviews WHERE user_id = ? ${orderByClause}`,
+            `SELECT * FROM reviews WHERE user_id = ? ORDER BY created_at DESC`,
             [userId]
         );
 
