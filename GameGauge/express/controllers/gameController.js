@@ -1,4 +1,5 @@
 const axios = require('axios');
+const db = require('../config/db');
 
 let cachedAccessToken = null;
 let tokenExpiryTime = null;
@@ -95,4 +96,36 @@ const getGameById = async (req, res) => {
   }
 };
 
-module.exports = { searchGames, getGameById };
+const getRatingStats = async (req, res) => {
+  try {
+    const { gameId } = req.params;
+
+    // Fetch ratings for the specific game
+    const [rows] = await db.query('SELECT rating FROM reviews WHERE game_id = ?', [gameId]);
+
+    console.log('Raw ratings from database:', rows); // Log the raw ratings for debugging
+
+    // Extract ratings from the rows
+    const validRatings = rows.map(row => row.rating).filter(rating => rating !== null);
+    console.log('Filtered valid ratings:', validRatings); // Log filtered ratings
+
+    const totalRatings = validRatings.length;
+
+    // Calculate the sum of valid ratings
+    const sumRatings = validRatings.reduce((acc, curr) => acc + (curr || 0), 0); // Default to 0 if curr is null
+
+    // Calculate the average rating if totalRatings is not zero
+    const averageRating = totalRatings > 0 ? (sumRatings / totalRatings).toFixed(1) : '0.0'; // Return '0.0' if no ratings
+
+    res.status(200).json({
+      averageRating,
+      totalRatings,
+      individualRatings: validRatings, // Return filtered valid individual ratings
+    });
+  } catch (error) {
+    console.error('Error fetching rating stats:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+};
+
+module.exports = { searchGames, getGameById, getRatingStats };

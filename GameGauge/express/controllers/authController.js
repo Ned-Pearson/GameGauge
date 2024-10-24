@@ -3,8 +3,8 @@ const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
 // Helper function to generate Access Token
-const generateAccessToken = (userId) => {
-  return jwt.sign({ userId }, process.env.JWT_SECRET, { expiresIn: '15m' }); // Short-lived access token
+const generateAccessToken = (userId, username) => {
+  return jwt.sign({ userId, username }, process.env.JWT_SECRET, { expiresIn: '15m' }); // Short-lived access token
 };
 
 // Helper function to generate Refresh Token
@@ -50,7 +50,7 @@ exports.signin = async (req, res) => {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const accessToken = generateAccessToken(user[0].id);
+    const accessToken = generateAccessToken(user[0].id, user[0].username); // Include username
     const refreshToken = generateRefreshToken(user[0].id);
 
     await db.query('UPDATE users SET refresh_token = ? WHERE id = ?', [refreshToken, user[0].id]);
@@ -73,22 +73,26 @@ exports.refreshToken = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
 
   if (!refreshToken) {
+    console.log('No refresh token provided');
     return res.status(403).json({ message: 'No refresh token provided' });
   }
 
   try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_SECRET);
 
     const [user] = await db.query('SELECT * FROM users WHERE id = ? AND refresh_token = ?', [decoded.userId, refreshToken]);
 
     if (!user.length) {
+      console.log('Invalid refresh token');
       return res.status(403).json({ message: 'Invalid refresh token' });
     }
 
-    const newAccessToken = generateAccessToken(decoded.userId);
+    const newAccessToken = generateAccessToken(decoded.userId, user[0].username); // Include username
+    console.log('New access token generated successfully'); // Log success message
 
     return res.status(200).json({ accessToken: newAccessToken });
   } catch (err) {
+    console.error('Invalid or expired refresh token', err);
     return res.status(403).json({ message: 'Invalid or expired refresh token' });
   }
 };

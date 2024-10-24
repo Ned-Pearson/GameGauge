@@ -10,13 +10,13 @@ import SearchResults from './pages/searchResults';
 import { AuthProvider } from './context/authContext';
 import GamePage from './pages/gamePage';
 import Profile from './pages/profile';
+import ProfileReviews from './pages/profileReviews';
 
 
 function App() {
   return (
-
-    <AuthProvider>
-      <Router>
+    <Router>
+      <AuthProvider>
         <Header />
         <div className="main-content">
           <Routes>
@@ -37,11 +37,14 @@ function App() {
           <Routes>
             <Route path="/user/:username" element={<Profile />} />
           </Routes>
+          <Routes>
+            <Route path="/user/:username/reviews" element={<ProfileReviews />} />
+          </Routes>
           
         </div>
         <Footer /> {/* Needs expansion */}
+      </AuthProvider>
       </Router>
-    </AuthProvider>
   );
 }
 

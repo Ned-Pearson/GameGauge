@@ -1,0 +1,115 @@
+.reviews-page {
+    padding: 20px;
+  }
+  
+  .reviews-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .review-item {
+    margin-bottom: 20px;
+  }
+  
+  .review-card {
+    display: flex;
+    align-items: center;
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    cursor: pointer; /* Make it look clickable */
+    transition: transform 0.2s;
+  }
+  
+  .review-card:hover {
+    transform: translateY(-3px); /* Slight lift on hover to indicate clickability */
+  }
+  
+  .cover-image-container {
+    margin-right: 20px;
+  }
+  
+  .cover-image {
+    width: 100px;
+    height: 150px; /* Adjust as needed */
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .review-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .review-content h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .review-content p {
+    margin: 10px 0 0;
+  }
+  
+  /* Review date styles */
+  .review-date {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 0.9rem;
+    color: #666; /* Slightly lighter color for the date */
+  }
+
+  /* Styles for the sorting dropdown */
+.sort-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .dropdown-button {
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .dropdown-button:hover {
+    background-color: #ddd;
+  }
+  
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    width: 100%;
+  }
+  
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }
+  
+  .dropdown-item {
+    padding: 12px 16px;
+    cursor: pointer;
+  }
+  
+  .dropdown-item:hover {
+    background-color: #ddd;
+  }
+  
+  .dropdown-item.selected {
+    font-weight: bold;
+    color: #007BFF;
+  }

@@ -194,3 +194,38 @@ body {
 .game-genres strong, .game-platforms strong {
   color: #a5a5a5;
 }
+
+/* Rating chart styling */
+.rating-chart-container {
+  margin-top: 20px;
+}
+
+.rating-chart-container h2 {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.chartjs-render-monitor {
+  max-width: 300px; 
+  margin: 0 auto; /* Center the chart */
+}
+
+.recent-reviews {
+  margin-top: 40px;
+}
+
+.review-item {
+  background-color: #2a2a2a;
+  padding: 15px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.review-item p {
+  margin: 5px 0;
+}
+
+.review-date {
+  font-size: 0.9rem;
+  color: #a5a5a5;
+}

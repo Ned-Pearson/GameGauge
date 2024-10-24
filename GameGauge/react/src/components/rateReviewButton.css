@@ -1,0 +1,82 @@
+.rate-review-container {
+    position: relative;
+    margin: 20px;
+  }
+  
+  .rate-review-button {
+    padding: 10px;
+    background-color: #f0f0f0;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .rate-review-dropdown {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .rating-bar-container {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 10px;
+    justify-content: center;
+    align-items: flex-end;
+    height: 100px;
+  }
+  
+  .rating-bar {
+    width: 20px;
+    background-color: #e0e0e0;
+    cursor: pointer;
+    transition: height 0.2s, background-color 0.2s;
+    position: relative;
+  }
+  
+  /* Color bars based on rating */
+  .blue-bar {
+    background-color: blue;
+  }
+  
+  .green-bar {
+    background-color: green;
+  }
+  
+  .yellow-bar {
+    background-color: yellow;
+  }
+  
+  .orange-bar {
+    background-color: orange;
+  }
+  
+  .red-bar {
+    background-color: red;
+  }
+  
+  /* Display the number below the bar on hover */
+  .rating-number {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: black;
+  }
+  
+  .submit-rate-review-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .review-message {
+    margin-top: 10px;
+    font-size: 14px;
+    color: green;
+  }
+  

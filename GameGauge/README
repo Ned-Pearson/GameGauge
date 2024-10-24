@@ -1,18 +1,11 @@
 TODO:
 
-- Review functionality - Similar to log but includes rating and review text
-
-  - Update placeholder on gamepage to allow for logging
-  - Doesnt have a status (assumes games rated and reviewed after completion)
-  - Individual users reviews page
-  - Display average rating for a game on game page
-
 - User following functionality
 
   - Update users table to have following and followers per user
   - Add a members section / members search
   - Display member profile - displays their logs and reviews
-  - Has a follow button
+    - Has a follow button
 
 - Front page extension
 
@@ -21,9 +14,21 @@ TODO:
 
 - Misc todos
 
+  - Fix authContext not supplying a new access token from the refresh token when the access token expires
+  - Fix signup route
+  - Update game page to properly get the developer of a game instead of just the first involved company: https://api-docs.igdb.com/#involved-company
+
+  - Make signup auto log user in
+
   - Improve styling of game page
   - Improve styling of profile page
+
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
-  - Update games table to have a log count and rating count
-    - Display log count and rating count on game page
+  - Implement edit profile functionality
+    - Add a delete account feature to profile page
+    - Add a change password feature to profile page
+    - Add a change username feature
+    - Add a change email feature
+  - Make the user select search bar automatically when search bar is toggled open (avoids needing to click on it)
+  - Add further sorting for reviews page (select rating ranges etc)
