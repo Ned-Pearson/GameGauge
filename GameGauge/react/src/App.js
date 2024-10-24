@@ -10,6 +10,7 @@ import SearchResults from './pages/searchResults';
 import { AuthProvider } from './context/authContext';
 import GamePage from './pages/gamePage';
 import Profile from './pages/profile';
+import ProfileReviews from './pages/profileReviews';
 
 
 function App() {
@@ -35,6 +36,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/user/:username" element={<Profile />} />
+          </Routes>
+          <Routes>
+            <Route path="/user/:username/reviews" element={<ProfileReviews />} />
           </Routes>
           
         </div>
