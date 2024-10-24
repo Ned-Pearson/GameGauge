@@ -9,11 +9,26 @@ const ProfileReviews = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [sortOption, setSortOption] = useState('newest'); // Default sort option
+
+  const sortOptions = [
+    { value: 'newest', label: 'Newest First' },
+    { value: 'oldest', label: 'Oldest First' },
+    { value: 'highest-rating', label: 'Highest Rating' },
+    { value: 'lowest-rating', label: 'Lowest Rating' }
+  ];
+
+  // Function to handle sorting change
+  const handleSortChange = (sortValue) => {
+    setSortOption(sortValue);
+  };
 
   useEffect(() => {
     const fetchUserReviews = async () => {
       try {
-        const response = await API.get(`/reviews/user/${username}`);
+        const response = await API.get(`/reviews/user/${username}`, {
+          params: { sort: sortOption } // Send the selected sort option to the backend
+        });
         setReviews(response.data.reviews); 
         setLoading(false);
       } catch (err) {
@@ -24,7 +39,7 @@ const ProfileReviews = () => {
     };
 
     fetchUserReviews();
-  }, [username]);
+  }, [username, sortOption]); // Re-fetch reviews when sortOption changes
 
   if (loading) {
     return <div className="reviews-page"><p>Loading reviews...</p></div>;
@@ -37,6 +52,27 @@ const ProfileReviews = () => {
   return (
     <div className="reviews-page">
       <h1>{username}'s Reviews</h1>
+
+      {/* Sort Dropdown */}
+      <div className="sort-container">
+        <div className="dropdown">
+          <button className="dropdown-button">
+            Sort <span>&#9662;</span>
+          </button>
+          <div className="dropdown-content">
+            {sortOptions.map(option => (
+              <div
+                key={option.value}
+                className={`dropdown-item ${sortOption === option.value ? 'selected' : ''}`}
+                onClick={() => handleSortChange(option.value)}
+              >
+                {option.label}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {reviews.length > 0 ? (
         <ul className="reviews-list">
           {reviews.map((review) => (
