@@ -165,6 +165,12 @@ const Profile = () => {
           <p>No games dropped.</p>
         )}
       </section>
+      {/* Reviews Button - Placeholder */}
+      <section id="reviews">
+        <h2>{username}'s Reviews</h2>
+        <p>Want to see all of {username}'s reviews?</p>
+        <Link to={`/user/${username}/reviews`} className="view-reviews-button">View {username}'s Reviews</Link>
+      </section>
     </div>
   );
 };
