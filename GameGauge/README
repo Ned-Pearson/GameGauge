@@ -2,8 +2,7 @@ TODO:
 
 - Review functionality - Similar to log but includes rating and review text
 
-  - Individual users reviews page
-    - Similar to user logs page, just display all of the users reviews (containing text) in newest to oldest.
+  - add sorting for reviews page
 
 - User following functionality
 
@@ -20,8 +19,11 @@ TODO:
 - Misc todos
 
   - Fix authContext not supplying a new access token from the refresh token when the access token expires
+  - Update game page to properly get the developer of a game instead of just the first involved company: https://api-docs.igdb.com/#involved-company
+
   - Improve styling of game page
   - Improve styling of profile page
+
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
   - Implement edit profile functionality
