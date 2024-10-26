@@ -119,9 +119,11 @@ const getReviewsByUsername = async (req, res) => {
 
         const userId = userRows[0].id;
 
-        // Fetch all reviews for the user
+        // Fetch all reviews with text for the user
         const [userReviews] = await db.execute(
-            `SELECT * FROM reviews WHERE user_id = ? ORDER BY created_at DESC`,
+            `SELECT * FROM reviews 
+             WHERE user_id = ? AND review_text IS NOT NULL AND review_text != '' 
+             ORDER BY created_at DESC`,
             [userId]
         );
 
