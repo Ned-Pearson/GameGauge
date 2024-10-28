@@ -11,6 +11,7 @@ import { AuthProvider } from './context/authContext';
 import GamePage from './pages/gamePage';
 import Profile from './pages/profile';
 import ProfileReviews from './pages/profileReviews';
+import UsersPage from './pages/usersPage';
 
 
 function App() {
@@ -33,6 +34,9 @@ function App() {
           </Routes>
           <Routes>
             <Route path="/game/:id" element={<GamePage />} />
+          </Routes>
+          <Routes>
+            <Route path="/users" element={<UsersPage />} />
           </Routes>
           <Routes>
             <Route path="/user/:username" element={<Profile />} />
