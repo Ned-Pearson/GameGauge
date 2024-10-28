@@ -8,29 +8,34 @@ import './usersPage.css';
 function UsersPage() {
   const [users, setUsers] = useState([]);
   const [following, setFollowing] = useState([]);
+  const [followers, setFollowers] = useState([]);
+  const [hoveredUser, setHoveredUser] = useState(null);
   const { auth } = useContext(AuthContext);
 
   // Decode token to get userId
   const userId = auth.token ? jwtDecode(auth.token).userId : null;
 
   useEffect(() => {
-    const fetchUsersAndFollowing = async () => {
+    const fetchUsersAndRelations = async () => {
       try {
         // Fetch all users
         const usersResponse = await axios.get('http://localhost:5000/api/users');
         setUsers(usersResponse.data.users);
 
-        // If user is logged in, fetch their following list
+        // If user is logged in, fetch their following and followers list
         if (userId) {
           const followingResponse = await axios.get(`http://localhost:5000/api/${userId}/following`);
           setFollowing(followingResponse.data.following.map(user => user.id));
+
+          const followersResponse = await axios.get(`http://localhost:5000/api/${userId}/followers`);
+          setFollowers(followersResponse.data.followers);
         }
       } catch (error) {
-        console.error('Error fetching users or following list:', error);
+        console.error('Error fetching users or relations:', error);
       }
     };
 
-    fetchUsersAndFollowing();
+    fetchUsersAndRelations();
   }, [userId]);
 
   const handleFollowToggle = async (targetUserId) => {
@@ -59,18 +64,53 @@ function UsersPage() {
       <ul className="user-list">
         {users.map((user) => (
           <li key={user.id} className="user-item">
-            <Link to={`/user/${user.username}`}>{user.username}</Link>
+            <div className="profile-picture-placeholder"></div>
+            <div className="user-info">
+              <Link to={`/user/${user.username}`} className="username">{user.username}</Link>
+            </div>
             {userId && user.id !== userId && (
-              <button 
+              <button
                 onClick={() => handleFollowToggle(user.id)}
-                className={`follow-btn ${following.includes(user.id) ? 'unfollow' : 'follow'}`}
+                onMouseEnter={() => setHoveredUser(user.username)}
+                onMouseLeave={() => setHoveredUser(null)}
+                className={`follow-btn ${following.includes(user.id) ? 'following' : ''}`}
               >
-                {following.includes(user.id) ? 'Unfollow' : 'Follow'}
+                {following.includes(user.id)
+                  ? hoveredUser === user.username ? 'Unfollow' : '✓'
+                  : `Follow ${user.username}`
+                }
               </button>
             )}
           </li>
         ))}
       </ul>
+      <div className="sidebar">
+        <h3>Following</h3>
+        <ul className="relation-list">
+          {following.map(followedId => {
+            const followedUser = users.find(user => user.id === followedId);
+            return followedUser && (
+              <li key={followedUser.id} className="relation-item">
+                <Link to={`/user/${followedUser.username}`}>
+                  <div className="profile-picture-placeholder"></div>
+                  <span className="username">{followedUser.username}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+        <h3>Followers</h3>
+        <ul className="relation-list">
+          {followers.map(follower => (
+            <li key={follower.id} className="relation-item">
+              <Link to={`/user/${follower.username}`}>
+                <div className="profile-picture-placeholder"></div>
+                <span className="username">{follower.username}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
