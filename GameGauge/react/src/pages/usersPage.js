@@ -10,6 +10,7 @@ function UsersPage() {
   const [following, setFollowing] = useState([]);
   const [followers, setFollowers] = useState([]);
   const [hoveredUser, setHoveredUser] = useState(null);
+  const [hoveredSidebarUser, setHoveredSidebarUser] = useState(null);
   const { auth } = useContext(AuthContext);
 
   // Decode token to get userId
@@ -60,11 +61,12 @@ function UsersPage() {
 
   return (
     <div className="users-page">
-      <h2>All Users</h2>
       <ul className="user-list">
         {users.map((user) => (
           <li key={user.id} className="user-item">
-            <div className="profile-picture-placeholder"></div>
+            <Link to={`/user/${user.username}`}>
+              <div className="profile-picture-placeholder"></div>
+            </Link>
             <div className="user-info">
               <Link to={`/user/${user.username}`} className="username">{user.username}</Link>
             </div>
@@ -92,9 +94,15 @@ function UsersPage() {
             return followedUser && (
               <li key={followedUser.id} className="relation-item">
                 <Link to={`/user/${followedUser.username}`}>
-                  <div className="profile-picture-placeholder"></div>
-                  <span className="username">{followedUser.username}</span>
+                  <div
+                    className="profile-picture-placeholder"
+                    onMouseEnter={() => setHoveredSidebarUser(followedUser.username)}
+                    onMouseLeave={() => setHoveredSidebarUser(null)}
+                  ></div>
                 </Link>
+                {hoveredSidebarUser === followedUser.username && (
+                  <span className="hover-username">{followedUser.username}</span>
+                )}
               </li>
             );
           })}
@@ -104,9 +112,15 @@ function UsersPage() {
           {followers.map(follower => (
             <li key={follower.id} className="relation-item">
               <Link to={`/user/${follower.username}`}>
-                <div className="profile-picture-placeholder"></div>
-                <span className="username">{follower.username}</span>
+                <div
+                  className="profile-picture-placeholder"
+                  onMouseEnter={() => setHoveredSidebarUser(follower.username)}
+                  onMouseLeave={() => setHoveredSidebarUser(null)}
+                ></div>
               </Link>
+              {hoveredSidebarUser === follower.username && (
+                <span className="hover-username">{follower.username}</span>
+              )}
             </li>
           ))}
         </ul>
