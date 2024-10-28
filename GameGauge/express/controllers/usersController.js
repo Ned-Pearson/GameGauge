@@ -11,7 +11,7 @@ const followUser = async (req, res) => {
 
   try {
     await db.execute(
-      'INSERT INTO follows (follower_id, following_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE follower_id = follower_id',
+      'INSERT INTO follows (follower_id, followed_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE follower_id = follower_id',
       [followerId, userIdToFollow]
     );
 
@@ -33,7 +33,7 @@ const unfollowUser = async (req, res) => {
 
   try {
     const [result] = await db.execute(
-      'DELETE FROM follows WHERE follower_id = ? AND following_id = ?',
+      'DELETE FROM follows WHERE follower_id = ? AND followed_id = ?',
       [followerId, userIdToUnfollow]
     );
 
@@ -57,7 +57,7 @@ const getFollowers = async (req, res) => {
       `SELECT users.id, users.username 
        FROM follows 
        JOIN users ON follows.follower_id = users.id 
-       WHERE follows.following_id = ?`,
+       WHERE follows.followed_id = ?`,
       [userId]
     );
 
@@ -76,7 +76,7 @@ const getFollowing = async (req, res) => {
     const [following] = await db.execute(
       `SELECT users.id, users.username 
        FROM follows 
-       JOIN users ON follows.following_id = users.id 
+       JOIN users ON follows.followed_id = users.id 
        WHERE follows.follower_id = ?`,
       [userId]
     );
@@ -88,4 +88,17 @@ const getFollowing = async (req, res) => {
   }
 };
 
-module.exports = { followUser, unfollowUser, getFollowers, getFollowing };
+// Get all users
+const getUsers = async (req, res) => {
+  try {
+    const [users] = await db.execute(
+      'SELECT id, username FROM users ORDER BY username ASC'
+    );
+    res.json({ users });
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    res.status(500).json({ message: 'Failed to fetch users.' });
+  }
+};
+
+module.exports = { followUser, unfollowUser, getFollowers, getFollowing, getUsers };

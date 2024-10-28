@@ -7,7 +7,7 @@ const authRoutes = require('./routes/authRoutes');
 const searchRoutes = require('./routes/gameRoutes');
 const logRoutes = require('./routes/logRoutes');
 const reviewRoutes = require('./routes/reviewRoutes');
-const followRoutes = require('./routes/followRoutes');
+const usersRoutes = require('./routes/usersRoutes');
 
 const app = express();
 
@@ -26,7 +26,7 @@ app.use('/api', authRoutes);    // Use the auth routes for API
 app.use('/api', searchRoutes);  // Use the search routes for API
 app.use('/api', logRoutes);
 app.use('/api', reviewRoutes);
-app.use('/api', followRoutes);
+app.use('/api', usersRoutes);
 
 // Root route for health check
 app.get('/', (req, res) => {

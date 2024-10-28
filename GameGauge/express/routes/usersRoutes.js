@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
-const { followUser, unfollowUser, getFollowers, getFollowing } = require('../controllers/followController');
+const { followUser, unfollowUser, getFollowers, getFollowing, getUsers } = require('../controllers/usersController');
 
 // Follow a user (authenticated)
 router.post('/follow', authMiddleware, followUser);
@@ -14,5 +14,7 @@ router.get('/:userId/followers', getFollowers);
 
 // Get a list of users a specific user is following (public)
 router.get('/:userId/following', getFollowing);
+
+router.get('/users', getUsers);
 
 module.exports = router;
