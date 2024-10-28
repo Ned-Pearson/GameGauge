@@ -2,8 +2,9 @@ TODO:
 
 - User following functionality
 
-  - Update users table to have following and followers per user
-  - Add a members section / members search
+  - Add additional information on users page
+    - Display of who youre following, who follows you, popular users, etc.
+  - Add members search
   - Display member profile - displays their logs and reviews
     - Has a follow button
 
