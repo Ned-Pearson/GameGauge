@@ -76,8 +76,8 @@ function UsersPage() {
                 className={`follow-btn ${following.includes(user.id) ? 'following' : ''}`}
               >
                 {following.includes(user.id)
-                  ? hoveredUser === user.username ? 'Unfollow' : '✓'
-                  : `Follow ${user.username}`
+                  ? hoveredUser === user.username ? 'X' : '✓'
+                  : `+`
                 }
               </button>
             )}
