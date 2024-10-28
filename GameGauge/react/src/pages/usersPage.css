@@ -1,0 +1,35 @@
+.users-page {
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .user-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .user-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .follow-btn {
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+  }
+  
+  .follow-btn.follow {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .follow-btn.unfollow {
+    background-color: #f44336;
+    color: white;
+  }
+  
