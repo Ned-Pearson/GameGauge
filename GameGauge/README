@@ -23,6 +23,8 @@ TODO:
   - Improve styling of profile page
   - Improve styling of users page
 
+  - Add profile picture uploading (multer)
+
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
   - Implement edit profile functionality
@@ -32,3 +34,5 @@ TODO:
     - Add a change email feature
   - Make the user select search bar automatically when search bar is toggled open (avoids needing to click on it)
   - Add further sorting for reviews page (select rating ranges etc)
+
+  - Maybe a verify email after signup functionality
