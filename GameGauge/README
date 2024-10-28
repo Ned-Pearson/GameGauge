@@ -2,11 +2,9 @@ TODO:
 
 - User following functionality
 
-  - Add additional information on users page
-    - Display of who youre following, who follows you, popular users, etc.
-  - Add members search
-  - Display member profile - displays their logs and reviews
-    - Has a follow button
+  - Display further user information (number of logs, reviews, etc.)
+  - Add user search to the users page
+    - Has a follow button if on another users profile
 
 - Front page extension
 
@@ -23,6 +21,7 @@ TODO:
 
   - Improve styling of game page
   - Improve styling of profile page
+  - Improve styling of users page
 
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
