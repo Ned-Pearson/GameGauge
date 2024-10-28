@@ -78,6 +78,7 @@ function Header() {
           )}
           <Link to="/games" className="nav-item">Games</Link>
           <Link to="/lists" className="nav-item">Lists</Link>
+          <Link to="/users" className="nav-item">Users</Link>
         </nav>
 
         {/* Search bar */}
