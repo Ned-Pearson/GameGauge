@@ -23,7 +23,9 @@ TODO:
   - Improve styling of profile page
   - Improve styling of users page
 
-  - Add profile picture uploading (multer)
+  - Profile uploads:
+
+    - Make uploading a new profile picture delete the previous from storage
 
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
