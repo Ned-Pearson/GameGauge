@@ -3,17 +3,27 @@ import API from '../utils/axios';
 import { useParams, Link } from 'react-router-dom'; // Import to get the dynamic URL param
 import { AuthContext } from '../context/authContext';
 import GameLog from '../components/gameLog';
-import './profile.css'; 
+import './profile.css';
 
 const Profile = () => {
   const { username } = useParams(); // Get the username from the URL
   const { auth } = useContext(AuthContext); // Get authentication details
   const [logs, setLogs] = useState([]);
+  const [profilePic, setProfilePic] = useState(null); // New state for profile picture
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  // Fetch user's logs on component mount
+  // Fetch user's logs and profile picture on component mount
   useEffect(() => {
+    const fetchProfilePic = async () => {
+      try {
+        const response = await API.get(`/users/${username}/profile-pic`);
+        setProfilePic(response.data.profilePic);
+      } catch (error) {
+        console.error('Error fetching profile picture:', error);
+      }
+    };
+
     const fetchLogs = async () => {
       try {
         const response = await API.get(`/logs/user/${username}`);
@@ -51,7 +61,8 @@ const Profile = () => {
       }
     };
   
-    fetchLogs();
+    fetchProfilePic(); // Fetch profile picture
+    fetchLogs();       // Fetch logs
   }, [username]);    
 
   const isOwner = auth?.username === username; // Check if the logged-in user is the profile owner
@@ -84,9 +95,17 @@ const Profile = () => {
   return (
     <div className="profile-page">
       <h1>{username}'s Profile</h1>
+      {profilePic && (
+        console.log('Profile picture path in component:', profilePic),
+        <img
+          src={`http://localhost:5000/${profilePic}`}
+          alt={`${username}'s profile`}
+          className="profile-pic"
+        />
+      )}
 
       {/* Show "Edit Profile" button only if the logged-in user is viewing their own profile */}
-      {isOwner && <button className="edit-profile-button">Edit Profile</button>} {/* Placeholder button */}
+      {isOwner && <Link to={`/user/${username}/edit-profile`} className="edit-profile-button">Edit Profile</Link>}
 
       <div className="status-navigation">
         <a href="#completed">Completed</a>
@@ -165,6 +184,7 @@ const Profile = () => {
           <p>No games dropped.</p>
         )}
       </section>
+      
       {/* Reviews Button - Placeholder */}
       <section id="reviews">
         <h2>{username}'s Reviews</h2>
