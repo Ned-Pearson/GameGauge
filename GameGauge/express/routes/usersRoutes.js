@@ -30,11 +30,13 @@ router.get('/:userId/followers', getFollowers);
 // Get a list of users a specific user is following (public)
 router.get('/:userId/following', getFollowing);
 
+// Get all users (public)
 router.get('/users', getUsers);
 
-// Profile picture upload route
+// Profile picture upload route with file deletion logic
 router.post('/upload-profile-pic', authMiddleware, upload.single('profilePic'), uploadProfilePic);
 
+// Get user profile picture by username (public)
 router.get('/users/:username/profile-pic', getUserProfilePic);
 
 module.exports = router;
