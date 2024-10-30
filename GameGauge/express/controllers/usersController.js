@@ -1,5 +1,6 @@
 const db = require('../config/db');
 const path = require('path');
+const fs = require('fs');
 
 // Follow a user
 const followUser = async (req, res) => {
@@ -102,13 +103,23 @@ const getUsers = async (req, res) => {
   }
 };
 
+// Profile picture upload with deletion of previous picture
 const uploadProfilePic = async (req, res) => {
   const userId = req.user.userId;
-  // Create the path with forward slashes
-  const profilePicPath = `uploads/${req.file.filename}`;
+  const newProfilePicPath = `uploads/${req.file.filename}`;
 
   try {
-    await db.execute('UPDATE users SET profile_pic = ? WHERE id = ?', [profilePicPath, userId]);
+    // Retrieve the current profile picture path from the database
+    const [rows] = await db.execute('SELECT profile_pic FROM users WHERE id = ?', [userId]);
+    const currentProfilePicPath = rows[0].profile_pic;
+
+    // Delete the existing profile picture file if it exists
+    if (currentProfilePicPath && fs.existsSync(currentProfilePicPath)) {
+      fs.unlinkSync(currentProfilePicPath);
+    }
+
+    // Update the user's profile picture path in the database
+    await db.execute('UPDATE users SET profile_pic = ? WHERE id = ?', [newProfilePicPath, userId]);
     res.status(200).json({ message: 'Profile picture updated successfully.' });
   } catch (error) {
     console.error('Error updating profile picture:', error);
@@ -133,7 +144,6 @@ const getUserProfilePic = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch profile picture.' });
   }
 };
-
 
 module.exports = {
   followUser,
