@@ -23,10 +23,6 @@ TODO:
   - Improve styling of profile page
   - Improve styling of users page
 
-  - Profile uploads:
-
-    - Make uploading a new profile picture delete the previous from storage
-
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
   - Implement edit profile functionality
