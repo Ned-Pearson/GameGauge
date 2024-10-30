@@ -1,6 +1,7 @@
 require('dotenv').config();
 const cors = require('cors');
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const authRoutes = require('./routes/authRoutes');
@@ -27,6 +28,8 @@ app.use('/api', searchRoutes);  // Use the search routes for API
 app.use('/api', logRoutes);
 app.use('/api', reviewRoutes);
 app.use('/api', usersRoutes);
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Root route for health check
 app.get('/', (req, res) => {
