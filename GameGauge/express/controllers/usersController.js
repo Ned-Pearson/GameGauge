@@ -1,4 +1,5 @@
 const db = require('../config/db');
+const path = require('path');
 
 // Follow a user
 const followUser = async (req, res) => {
@@ -101,4 +102,45 @@ const getUsers = async (req, res) => {
   }
 };
 
-module.exports = { followUser, unfollowUser, getFollowers, getFollowing, getUsers };
+const uploadProfilePic = async (req, res) => {
+  const userId = req.user.userId;
+  // Create the path with forward slashes
+  const profilePicPath = `uploads/${req.file.filename}`;
+
+  try {
+    await db.execute('UPDATE users SET profile_pic = ? WHERE id = ?', [profilePicPath, userId]);
+    res.status(200).json({ message: 'Profile picture updated successfully.' });
+  } catch (error) {
+    console.error('Error updating profile picture:', error);
+    res.status(500).json({ message: 'Failed to update profile picture.' });
+  }
+};
+
+// Function to get a user's profile picture by their username
+const getUserProfilePic = async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const [rows] = await db.execute('SELECT profile_pic FROM users WHERE username = ?', [username]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const profilePicPath = rows[0].profile_pic;
+    res.json({ profilePic: profilePicPath }); // Use the path as stored
+  } catch (error) {
+    console.error('Error fetching profile picture:', error);
+    res.status(500).json({ message: 'Failed to fetch profile picture.' });
+  }
+};
+
+
+module.exports = {
+  followUser,
+  unfollowUser,
+  getFollowers,
+  getFollowing,
+  getUsers,
+  uploadProfilePic,
+  getUserProfilePic,
+};

@@ -1,7 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
-const { followUser, unfollowUser, getFollowers, getFollowing, getUsers } = require('../controllers/usersController');
+const { followUser, unfollowUser, getFollowers, getFollowing, getUsers, uploadProfilePic, getUserProfilePic } = require('../controllers/usersController');
+const multer = require('multer');
+const path = require('path');
+
+// Configure multer storage to retain the original file extension
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/'); 
+  },
+  filename: (req, file, cb) => {
+    const ext = path.extname(file.originalname); // Preserve the original extension
+    cb(null, `${file.fieldname}-${Date.now()}${ext}`);
+  },
+});
+
+const upload = multer({ storage });
 
 // Follow a user (authenticated)
 router.post('/follow', authMiddleware, followUser);
@@ -16,5 +31,10 @@ router.get('/:userId/followers', getFollowers);
 router.get('/:userId/following', getFollowing);
 
 router.get('/users', getUsers);
+
+// Profile picture upload route
+router.post('/upload-profile-pic', authMiddleware, upload.single('profilePic'), uploadProfilePic);
+
+router.get('/users/:username/profile-pic', getUserProfilePic);
 
 module.exports = router;
