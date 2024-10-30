@@ -19,17 +19,47 @@ function UsersPage() {
   useEffect(() => {
     const fetchUsersAndRelations = async () => {
       try {
-        // Fetch all users
+        // Fetch all users with profile pictures
         const usersResponse = await axios.get('http://localhost:5000/api/users');
-        setUsers(usersResponse.data.users);
+        const usersWithPics = await Promise.all(
+          usersResponse.data.users.map(async (user) => {
+            try {
+              const profilePicResponse = await axios.get(`http://localhost:5000/api/users/${user.username}/profile-pic`);
+              return { ...user, profilePic: profilePicResponse.data.profilePic };
+            } catch {
+              return user;
+            }
+          })
+        );
+        setUsers(usersWithPics);
 
         // If user is logged in, fetch their following and followers list
         if (userId) {
           const followingResponse = await axios.get(`http://localhost:5000/api/${userId}/following`);
-          setFollowing(followingResponse.data.following.map(user => user.id));
+          const followingWithPics = await Promise.all(
+            followingResponse.data.following.map(async (user) => {
+              try {
+                const profilePicResponse = await axios.get(`http://localhost:5000/api/users/${user.username}/profile-pic`);
+                return { ...user, profilePic: profilePicResponse.data.profilePic };
+              } catch {
+                return user;
+              }
+            })
+          );
+          setFollowing(followingWithPics);
 
           const followersResponse = await axios.get(`http://localhost:5000/api/${userId}/followers`);
-          setFollowers(followersResponse.data.followers);
+          const followersWithPics = await Promise.all(
+            followersResponse.data.followers.map(async (user) => {
+              try {
+                const profilePicResponse = await axios.get(`http://localhost:5000/api/users/${user.username}/profile-pic`);
+                return { ...user, profilePic: profilePicResponse.data.profilePic };
+              } catch {
+                return user;
+              }
+            })
+          );
+          setFollowers(followersWithPics);
         }
       } catch (error) {
         console.error('Error fetching users or relations:', error);
@@ -47,12 +77,12 @@ function UsersPage() {
         }
       };
 
-      if (following.includes(targetUserId)) {
+      if (following.some(user => user.id === targetUserId)) {
         await axios.post('http://localhost:5000/api/unfollow', { userIdToUnfollow: targetUserId }, config);
-        setFollowing(following.filter(id => id !== targetUserId));
+        setFollowing(following.filter(user => user.id !== targetUserId));
       } else {
         await axios.post('http://localhost:5000/api/follow', { userIdToFollow: targetUserId }, config);
-        setFollowing([...following, targetUserId]);
+        setFollowing([...following, { id: targetUserId }]);
       }
     } catch (error) {
       console.error('Error toggling follow status:', error);
@@ -65,7 +95,11 @@ function UsersPage() {
         {users.map((user) => (
           <li key={user.id} className="user-item">
             <Link to={`/user/${user.username}`}>
-              <div className="profile-picture-placeholder"></div>
+              <img
+                className="profile-picture-placeholder"
+                src={user.profilePic ? `http://localhost:5000/${user.profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"}
+                alt={`${user.username}'s profile`}
+              />
             </Link>
             <div className="user-info">
               <Link to={`/user/${user.username}`} className="username">{user.username}</Link>
@@ -75,9 +109,9 @@ function UsersPage() {
                 onClick={() => handleFollowToggle(user.id)}
                 onMouseEnter={() => setHoveredUser(user.username)}
                 onMouseLeave={() => setHoveredUser(null)}
-                className={`follow-btn ${following.includes(user.id) ? 'following' : ''}`}
+                className={`follow-btn ${following.some(u => u.id === user.id) ? 'following' : ''}`}
               >
-                {following.includes(user.id)
+                {following.some(u => u.id === user.id)
                   ? hoveredUser === user.username ? 'X' : '✓'
                   : `+`
                 }
@@ -92,23 +126,22 @@ function UsersPage() {
         <div className="sidebar">
           <h3>Following</h3>
           <ul className="relation-list">
-            {following.map(followedId => {
-              const followedUser = users.find(user => user.id === followedId);
-              return followedUser && (
-                <li key={followedUser.id} className="relation-item">
-                  <Link to={`/user/${followedUser.username}`}>
-                    <div
-                      className="profile-picture-placeholder"
-                      onMouseEnter={() => setHoveredSidebarUser(followedUser.username)}
-                      onMouseLeave={() => setHoveredSidebarUser(null)}
-                    ></div>
-                  </Link>
-                  {hoveredSidebarUser === followedUser.username && (
-                    <span className="hover-username">{followedUser.username}</span>
-                  )}
-                </li>
-              );
-            })}
+            {following.map(followedUser => (
+              <li key={followedUser.id} className="relation-item">
+                <Link to={`/user/${followedUser.username}`}>
+                  <img
+                    className="profile-picture-placeholder"
+                    src={followedUser.profilePic ? `http://localhost:5000/${followedUser.profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"}
+                    alt={`${followedUser.username}'s profile`}
+                    onMouseEnter={() => setHoveredSidebarUser(followedUser.username)}
+                    onMouseLeave={() => setHoveredSidebarUser(null)}
+                  />
+                </Link>
+                {hoveredSidebarUser === followedUser.username && (
+                  <span className="hover-username">{followedUser.username}</span>
+                )}
+              </li>
+            ))}
           </ul>
 
           <h3>Followers</h3>
@@ -116,11 +149,13 @@ function UsersPage() {
             {followers.map(follower => (
               <li key={follower.id} className="relation-item">
                 <Link to={`/user/${follower.username}`}>
-                  <div
+                  <img
                     className="profile-picture-placeholder"
+                    src={follower.profilePic ? `http://localhost:5000/${follower.profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"}
+                    alt={`${follower.username}'s profile`}
                     onMouseEnter={() => setHoveredSidebarUser(follower.username)}
                     onMouseLeave={() => setHoveredSidebarUser(null)}
-                  ></div>
+                  />
                 </Link>
                 {hoveredSidebarUser === follower.username && (
                   <span className="hover-username">{follower.username}</span>
