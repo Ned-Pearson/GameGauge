@@ -11,6 +11,8 @@ function UsersPage() {
   const [followers, setFollowers] = useState([]);
   const [hoveredUser, setHoveredUser] = useState(null);
   const [hoveredSidebarUser, setHoveredSidebarUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const { auth } = useContext(AuthContext);
 
   // Decode token to get userId
@@ -89,10 +91,46 @@ function UsersPage() {
     }
   };
 
+  const handleSearch = async (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+  
+    if (query.trim()) {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/users/search`, {
+          params: { username: query },
+        });
+        const resultsWithPics = await Promise.all(
+          response.data.users.map(async (user) => {
+            try {
+              const profilePicResponse = await axios.get(`http://localhost:5000/api/users/${user.username}/profile-pic`);
+              return { ...user, profilePic: profilePicResponse.data.profilePic };
+            } catch {
+              return user;
+            }
+          })
+        );
+        setSearchResults(resultsWithPics);
+      } catch (error) {
+        console.error('Error during search:', error);
+      }
+    } else {
+      setSearchResults([]);
+    }
+  };  
+
   return (
     <div className="users-page">
+      <input
+        type="text"
+        placeholder="Search users..."
+        value={searchQuery}
+        onChange={handleSearch}
+        className="search-input"
+      />
+
       <ul className="user-list">
-        {users.map((user) => (
+        {(searchQuery ? searchResults : users).map((user) => (
           <li key={user.id} className="user-item">
             <Link to={`/user/${user.username}`}>
               <img
