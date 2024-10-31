@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
-const { followUser, unfollowUser, getFollowers, getFollowing, getUsers, uploadProfilePic, getUserProfilePic } = require('../controllers/usersController');
+const { followUser, unfollowUser, getFollowers, getFollowing, getUsers, uploadProfilePic, getUserProfilePic, searchUsers } = require('../controllers/usersController');
 const multer = require('multer');
 const path = require('path');
 
@@ -38,5 +38,7 @@ router.post('/upload-profile-pic', authMiddleware, upload.single('profilePic'), 
 
 // Get user profile picture by username (public)
 router.get('/users/:username/profile-pic', getUserProfilePic);
+
+router.get('/users/search', searchUsers);
 
 module.exports = router;

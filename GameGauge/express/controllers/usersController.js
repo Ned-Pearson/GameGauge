@@ -145,6 +145,26 @@ const getUserProfilePic = async (req, res) => {
   }
 };
 
+// Search for users by username (partial match)
+const searchUsers = async (req, res) => {
+  const { username } = req.query;
+
+  if (!username) {
+    return res.status(400).json({ message: 'Search query is required.' });
+  }
+
+  try {
+    const [users] = await db.execute(
+      'SELECT id, username FROM users WHERE username LIKE ? ORDER BY username ASC',
+      [`%${username}%`]
+    );
+    res.json({ users });
+  } catch (error) {
+    console.error('Error searching users:', error);
+    res.status(500).json({ message: 'Failed to search users.' });
+  }
+};
+
 module.exports = {
   followUser,
   unfollowUser,
@@ -153,4 +173,5 @@ module.exports = {
   getUsers,
   uploadProfilePic,
   getUserProfilePic,
+  searchUsers,
 };
