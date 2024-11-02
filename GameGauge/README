@@ -1,12 +1,5 @@
 TODO:
 
-- User following functionality
-
-  - Update users table to have following and followers per user
-  - Add a members section / members search
-  - Display member profile - displays their logs and reviews
-    - Has a follow button
-
 - Front page extension
 
   - Implement the 3 popular display pages on the front end
@@ -18,11 +11,11 @@ TODO:
   - Fix signup route
   - Update game page to properly get the developer of a game instead of just the first involved company: https://api-docs.igdb.com/#involved-company
 
-  - Make signup auto log user in
-
   - Improve styling of game page
   - Improve styling of profile page
+  - Improve styling of users page
 
+  - Make signup auto log user in
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
   - Implement edit profile functionality
@@ -32,3 +25,5 @@ TODO:
     - Add a change email feature
   - Make the user select search bar automatically when search bar is toggled open (avoids needing to click on it)
   - Add further sorting for reviews page (select rating ranges etc)
+
+  - Maybe a verify email after signup functionality

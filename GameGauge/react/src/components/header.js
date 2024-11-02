@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { searchGames } from '../utils/searchGames'; 
 import axios from 'axios';
@@ -9,8 +9,24 @@ function Header() {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [profilePic, setProfilePic] = useState(null); // State for profile picture
   const { auth, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchProfilePic = async () => {
+      if (auth.username) {
+        try {
+          const response = await axios.get(`http://localhost:5000/api/users/${auth.username}/profile-pic`);
+          setProfilePic(response.data.profilePic); // Store fetched profile picture
+        } catch (error) {
+          console.error('Error fetching profile picture:', error);
+        }
+      }
+    };
+
+    fetchProfilePic();
+  }, [auth.username]);
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
@@ -59,7 +75,11 @@ function Header() {
               onMouseEnter={() => setDropdownOpen(true)} 
               onMouseLeave={() => setDropdownOpen(false)}
             >
-              <img className="profile-pic" src="https://via.placeholder.com/30" alt="Profile" />
+              <img 
+                className="profile-pic" 
+                src={profilePic ? `http://localhost:5000/${profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"} 
+                alt="Profile" 
+              />
               <span className="username">{auth.username}</span>
               <span className="down-arrow">▼</span>
               {isDropdownOpen && (
@@ -78,6 +98,7 @@ function Header() {
           )}
           <Link to="/games" className="nav-item">Games</Link>
           <Link to="/lists" className="nav-item">Lists</Link>
+          <Link to="/users" className="nav-item">Users</Link>
         </nav>
 
         {/* Search bar */}
