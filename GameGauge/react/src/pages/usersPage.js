@@ -128,7 +128,7 @@ function UsersPage() {
         onChange={handleSearch}
         className="search-input"
       />
-
+  
       <ul className="user-list">
         {(searchQuery ? searchResults : users).map((user) => (
           <li key={user.id} className="user-item">
@@ -143,22 +143,29 @@ function UsersPage() {
               <Link to={`/user/${user.username}`} className="username">{user.username}</Link>
             </div>
             {userId && user.id !== userId && (
-              <button
-                onClick={() => handleFollowToggle(user.id)}
-                onMouseEnter={() => setHoveredUser(user.username)}
-                onMouseLeave={() => setHoveredUser(null)}
-                className={`follow-btn ${following.some(u => u.id === user.id) ? 'following' : ''}`}
-              >
-                {following.some(u => u.id === user.id)
-                  ? hoveredUser === user.username ? 'X' : '✓'
-                  : `+`
-                }
-              </button>
+              <div className="follow-button-container">
+                <button
+                  onClick={() => handleFollowToggle(user.id)}
+                  onMouseEnter={() => setHoveredUser(user.username)}
+                  onMouseLeave={() => setHoveredUser(null)}
+                  className={`follow-btn ${following.some(u => u.id === user.id) ? 'following' : ''}`}
+                >
+                  {following.some(u => u.id === user.id)
+                    ? hoveredUser === user.username ? 'X' : '✓'
+                    : `+`
+                  }
+                </button>
+                {hoveredUser === user.username && (
+                  <span className="hover-text">
+                    {following.some(u => u.id === user.id) ? `Unfollow ${user.username}` : `Follow ${user.username}`}
+                  </span>
+                )}
+              </div>
             )}
           </li>
         ))}
       </ul>
-
+  
       {/* Conditionally display "Following" and "Followers" sections if user is logged in */}
       {userId && (
         <div className="sidebar">
@@ -175,13 +182,10 @@ function UsersPage() {
                     onMouseLeave={() => setHoveredSidebarUser(null)}
                   />
                 </Link>
-                {hoveredSidebarUser === followedUser.username && (
-                  <span className="hover-username">{followedUser.username}</span>
-                )}
               </li>
             ))}
           </ul>
-
+  
           <h3>Followers</h3>
           <ul className="relation-list">
             {followers.map(follower => (
@@ -195,16 +199,13 @@ function UsersPage() {
                     onMouseLeave={() => setHoveredSidebarUser(null)}
                   />
                 </Link>
-                {hoveredSidebarUser === follower.username && (
-                  <span className="hover-username">{follower.username}</span>
-                )}
               </li>
             ))}
           </ul>
         </div>
       )}
     </div>
-  );
-}
+  );  
+}  
 
 export default UsersPage;

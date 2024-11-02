@@ -40,23 +40,6 @@
     text-decoration: none;
   }
   
-  .follow-btn {
-    padding: 6px 12px;
-    border: none;
-    cursor: pointer;
-    font-size: 0.9em;
-    transition: all 0.3s;
-  }
-  
-  .follow-btn.following {
-    background-color: #5ad76f;
-    color: white;
-  }
-  
-  .follow-btn.following:hover {
-    background-color: #d9534f;
-  }
-  
   .sidebar {
     flex: 1;
     background-color: #222;
@@ -103,3 +86,35 @@
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
     height: 30px;
   }
+
+  .follow-button-container {
+    position: relative; /* Keep this for positioning the hover text */
+  }
+  
+  .follow-btn {
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s;
+    display: block; /* Ensures the button behaves like a block element */
+    margin: 0; /* Remove any margins that might affect alignment */
+  }
+  
+  .hover-text {
+    font-size: 0.8em;
+    color: #555; /* Adjust color as needed */
+    position: absolute; /* Position text absolutely */
+    top: 100%; /* Place it directly below the button */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Adjust left offset for centering */
+    margin-top: 5px; /* Space between the button and text */
+    transition: opacity 0.3s ease;
+    white-space: nowrap; /* Prevents text wrapping */
+    opacity: 0; /* Start hidden */
+  }
+  
+  .follow-btn:hover + .hover-text {
+    opacity: 1; /* Show on hover */
+  }
+  
