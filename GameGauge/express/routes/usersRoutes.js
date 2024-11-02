@@ -42,7 +42,7 @@ router.get('/users/:username/profile-pic', getUserProfilePic);
 router.get('/users/search', searchUsers);
 
 // Check follow status
-router.get('/users/:username/is-following', authMiddleware, checkFollowStatus);
+router.get('/users/:username/is-following', checkFollowStatus);
 
 // Get user info by username
 router.get('/users/:username', getUserByUsername);

@@ -166,7 +166,8 @@ const searchUsers = async (req, res) => {
 };
 
 const checkFollowStatus = async (req, res) => {
-  const followerId = req.user.userId; // From auth middleware
+  // Check if the user is authenticated
+  const followerId = req.user ? req.user.userId : null; // Get userId if authenticated
   const { username } = req.params;
 
   try {
@@ -181,6 +182,11 @@ const checkFollowStatus = async (req, res) => {
     }
 
     const userIdToCheck = userRows[0].id;
+
+    // If there is no logged-in user, they are not following anyone
+    if (!followerId) {
+      return res.status(200).json({ isFollowing: false });
+    }
 
     // Then, check if the logged-in user is following this user
     const [rows] = await db.execute(
