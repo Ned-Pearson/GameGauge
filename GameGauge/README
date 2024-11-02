@@ -1,11 +1,5 @@
 TODO:
 
-- User following functionality
-
-  - Display further user information (number of logs, reviews, etc.)
-  - Add user search to the users page
-    - Has a follow button if on another users profile
-
 - Front page extension
 
   - Implement the 3 popular display pages on the front end
@@ -17,12 +11,11 @@ TODO:
   - Fix signup route
   - Update game page to properly get the developer of a game instead of just the first involved company: https://api-docs.igdb.com/#involved-company
 
-  - Make signup auto log user in
-
   - Improve styling of game page
   - Improve styling of profile page
   - Improve styling of users page
 
+  - Make signup auto log user in
   - Trim whitespace on username is signup + signin
   - Add a forgot password feature to signin
   - Implement edit profile functionality
