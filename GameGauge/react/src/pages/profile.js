@@ -113,32 +113,36 @@ const Profile = () => {
         />
       )}
 
-      {isOwner ? (
-        <Link to={`/user/${username}/edit-profile`} className="edit-profile-button">Edit Profile</Link>
-      ) : (
-        <button
-          onClick={handleFollowToggle}
-          onMouseEnter={() => {
-            setHoveredUser(username);
-          }}
-          onMouseLeave={() => {
-            setHoveredUser(null);
-          }}          
-          className={`follow-btn ${isFollowing ? 'following' : ''}`}
-        >
-          {isFollowing
-            ? hoveredUser === username ? 'X' : '✓'
-            : `+`
-          }
-        </button>
+        {isOwner ? (
+          // Show the Edit Profile button if the user is the profile owner
+          <Link to={`/user/${username}/edit-profile`} className="edit-profile-button">Edit Profile</Link>
+        ) : (
+          // Only show the follow button if the user is logged in
+          auth.username != null && (
+            <div className="follow-button-container">
+              <button
+                onClick={handleFollowToggle}
+                onMouseEnter={() => {
+                  setHoveredUser(username);
+                }}
+                onMouseLeave={() => {
+                  setHoveredUser(null);
+                }}
+                className={`follow-btn ${isFollowing ? 'following' : ''}`}
+              >
+                {isFollowing
+                  ? hoveredUser === username ? 'X' : '✓'
+                  : `+`
+                }
+              </button>
+              {!isOwner && hoveredUser === username && (
+                <div className="hover-text">
+                  {isFollowing ? `Unfollow ${username}` : `Follow ${username}`}
+                </div>
+              )}
+            </div>
+          )
         )}
-
-        {!isOwner && hoveredUser === username && (
-          <div className="hover-text">
-            {isFollowing ? `Unfollow ${username}` : `Follow ${username}`}
-          </div>
-        )}
-      
 
       <div className="status-navigation">
         <a href="#completed">Completed</a>
