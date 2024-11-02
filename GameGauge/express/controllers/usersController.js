@@ -165,6 +165,58 @@ const searchUsers = async (req, res) => {
   }
 };
 
+const checkFollowStatus = async (req, res) => {
+  const followerId = req.user.userId; // From auth middleware
+  const { username } = req.params;
+
+  try {
+    // First, get the userId for the given username
+    const [userRows] = await db.execute(
+      'SELECT id FROM users WHERE username = ?',
+      [username]
+    );
+
+    if (userRows.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    const userIdToCheck = userRows[0].id;
+
+    // Then, check if the logged-in user is following this user
+    const [rows] = await db.execute(
+      'SELECT 1 FROM follows WHERE follower_id = ? AND followed_id = ?',
+      [followerId, userIdToCheck]
+    );
+
+    const isFollowing = rows.length > 0;
+    res.status(200).json({ isFollowing });
+  } catch (error) {
+    console.error('Error checking follow status:', error);
+    res.status(500).json({ message: 'Failed to check follow status.' });
+  }
+};
+
+// Get user info by username
+const getUserByUsername = async (req, res) => {
+  const { username } = req.params;
+
+  try {
+    const [rows] = await db.execute(
+      'SELECT id, username, profile_pic FROM users WHERE username = ?',
+      [username]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: 'User not found.' });
+    }
+
+    res.status(200).json(rows[0]);
+  } catch (error) {
+    console.error('Error fetching user by username:', error);
+    res.status(500).json({ message: 'Failed to fetch user information.' });
+  }
+};
+
 module.exports = {
   followUser,
   unfollowUser,
@@ -174,4 +226,6 @@ module.exports = {
   uploadProfilePic,
   getUserProfilePic,
   searchUsers,
+  checkFollowStatus,
+  getUserByUsername,
 };

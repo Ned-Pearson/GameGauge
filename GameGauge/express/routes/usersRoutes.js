@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
-const { followUser, unfollowUser, getFollowers, getFollowing, getUsers, uploadProfilePic, getUserProfilePic, searchUsers } = require('../controllers/usersController');
+const { followUser, unfollowUser, getFollowers, getFollowing, getUsers, uploadProfilePic, getUserProfilePic, searchUsers, checkFollowStatus, getUserByUsername } = require('../controllers/usersController');
 const multer = require('multer');
 const path = require('path');
 
@@ -40,5 +40,11 @@ router.post('/upload-profile-pic', authMiddleware, upload.single('profilePic'), 
 router.get('/users/:username/profile-pic', getUserProfilePic);
 
 router.get('/users/search', searchUsers);
+
+// Check follow status
+router.get('/users/:username/is-following', authMiddleware, checkFollowStatus);
+
+// Get user info by username
+router.get('/users/:username', getUserByUsername);
 
 module.exports = router;
