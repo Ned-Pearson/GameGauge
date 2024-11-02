@@ -1,47 +1,55 @@
 .profile-page {
-    padding: 20px;
-  }
-  
-  .status-nav {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 20px;
-  }
-  
-  .status-nav a {
-    color: #007bff;
-    text-decoration: none;
-  }
-  
-  .status-nav a:hover {
-    text-decoration: underline;
-  }
-  
-  .status-section {
-    margin-bottom: 40px;
-  }
-  
-  .status-section h2 {
-    margin-bottom: 10px;
-  }
-  
-  .logs-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 15px;
-  }
-  
-  .view-reviews-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .view-reviews-button:hover {
-    background-color: #0056b3;
-  }
-  
+  padding: 20px;
+}
+
+.logs-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+}
+
+.view-reviews-button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.view-reviews-button:hover {
+  background-color: #0056b3;
+}
+
+.profile-picture {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.follow-btn {
+  padding: 6px 12px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: all 0.3s;
+}
+
+.follow-btn.following {
+  background-color: #5ad76f;
+  color: white;
+}
+
+.follow-btn.following:hover {
+  background-color: #d9534f;
+}
+
+.hover-text {
+  font-size: 0.8em;
+  color: #555; /* Adjust color later */
+  margin-top: 5px; 
+  transition: opacity 0.3s ease;
+}

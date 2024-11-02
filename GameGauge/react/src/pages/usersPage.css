@@ -1,0 +1,120 @@
+.users-page {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .user-list {
+    list-style: none;
+    padding: 0;
+    flex: 2;
+  }
+  
+  .user-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #333;
+  }
+  
+  .profile-picture-placeholder {
+    width: 50px;
+    height: 50px;
+    background-color: #444;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-grow: 1;
+  }
+  
+  .username {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .sidebar {
+    flex: 1;
+    background-color: #222;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .sidebar h3 {
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  
+  .relation-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 15px;
+  }
+  
+  .relation-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .relation-item .username {
+    color: #fff;
+    font-size: 0.9em;
+    margin-left: 10px;
+  }
+  
+  .relation-item .profile-picture-placeholder {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  
+  .search-input {
+    width: 200px;           /* Set a reasonable width */
+    max-width: 100%;        /* Ensure it doesn't exceed container size */
+    padding: 8px 12px;      /* Add padding for a better look */
+    border-radius: 5px;     /* Rounded corners */
+    border: 1px solid #ccc; /* Light gray border */
+    margin-bottom: 20px;    /* Add spacing below the search bar */
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    height: 30px;
+  }
+
+  .follow-button-container {
+    position: relative; /* Keep this for positioning the hover text */
+  }
+  
+  .follow-btn {
+    padding: 6px 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s;
+    display: block; /* Ensures the button behaves like a block element */
+    margin: 0; /* Remove any margins that might affect alignment */
+  }
+  
+  .hover-text {
+    font-size: 0.8em;
+    color: #555; /* Adjust color as needed */
+    position: absolute; /* Position text absolutely */
+    top: 100%; /* Place it directly below the button */
+    left: 50%; /* Center it horizontally */
+    transform: translateX(-50%); /* Adjust left offset for centering */
+    margin-top: 5px; /* Space between the button and text */
+    transition: opacity 0.3s ease;
+    white-space: nowrap; /* Prevents text wrapping */
+    opacity: 0; /* Start hidden */
+  }
+  
+  .follow-btn:hover + .hover-text {
+    opacity: 1; /* Show on hover */
+  }
+  
