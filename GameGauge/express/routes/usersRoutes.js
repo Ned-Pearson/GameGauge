@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
-const { followUser, unfollowUser, getFollowers, getFollowing, getUsers, uploadProfilePic, getUserProfilePic, searchUsers, checkFollowStatus, getUserByUsername } = require('../controllers/usersController');
+const { followUser, unfollowUser, getFollowers, getFollowing, getUsers, uploadProfilePic, getUserProfilePic, searchUsers, checkFollowStatus, getUserByUsername, getFriendActivity, getPopularWithFriends } = require('../controllers/usersController');
 const multer = require('multer');
 const path = require('path');
 
@@ -46,5 +46,10 @@ router.get('/users/:username/is-following', checkFollowStatus);
 
 // Get user info by username
 router.get('/users/:username', getUserByUsername);
+
+// Get friend activity for the new from friends homepage display
+router.get('/friend-activity', authMiddleware, getFriendActivity);
+
+router.get('/popular-with-friends', authMiddleware, getPopularWithFriends);
 
 module.exports = router;
