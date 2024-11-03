@@ -2,13 +2,11 @@ TODO:
 
 - Front page extension
 
-  - Implement the 3 popular display pages on the front end
-  - Due to website likely not being widely used, have the weekly popular functionality but don't update unless there is something new to replace it (just to avoid the areas becoming blank)
+  - Display under new from friends an indication of what friend and what action it was
 
 - Misc todos
 
   - Fix authContext not supplying a new access token from the refresh token when the access token expires
-  - Fix signup route
   - Update game page to properly get the developer of a game instead of just the first involved company: https://api-docs.igdb.com/#involved-company
 
   - Improve styling of game page
