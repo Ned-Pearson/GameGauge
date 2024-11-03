@@ -14,22 +14,30 @@ const generateRefreshToken = (userId) => {
 
 // Sign-Up Handler 
 exports.signup = async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
 
   try {
+    // Check if username already exists
     const [existingUser] = await db.query('SELECT * FROM users WHERE username = ?', [username]);
-
     if (existingUser.length) {
       return res.status(400).json({ message: 'Username already exists' });
     }
+    // Check if email already exists
+    const [existingEmail] = await db.query('SELECT * FROM users WHERE email = ?', [email]);
+    if (existingEmail.length) {
+      return res.status(400).json({ message: 'Email already exists' });
+    }
 
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    await db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword]);
+    // Insert new user into database
+    await db.query('INSERT INTO users (email, username, password) VALUES (?, ?, ?)', [email, username, hashedPassword]);
 
     return res.status(201).json({ message: 'User created successfully' });
   } catch (err) {
-    return res.status(500).json({ error: 'Server error' });
+    console.error('Signup error:', err); // Log the specific error
+    return res.status(500).json({ error: 'Server error', details: err.message });
   }
 };
 
