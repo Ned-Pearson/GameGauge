@@ -228,22 +228,24 @@ const getFriendActivity = async (req, res) => {
   const userId = req.user.userId;
 
   try {
-    // Fetch friends' activity
-    const [friendActivity] = await db.execute(`
-      SELECT logs.game_id, logs.game_name, logs.image_url, logs.status,
-             logs.log_date, users.username
-      FROM logs
-      JOIN follows ON follows.followed_id = logs.user_id
-      JOIN users ON users.id = logs.user_id
+    const [activity] = await db.query(`
+      SELECT reviews.game_id, reviews.game_name, reviews.image_url,
+             users.username, users.profile_pic,
+             reviews.rating AS reviewRating,
+             reviews.review_text AS reviewText,
+             reviews.created_at AS activity_date
+      FROM follows
+      JOIN users ON follows.followed_id = users.id
+      JOIN reviews ON reviews.user_id = users.id
       WHERE follows.follower_id = ?
-      ORDER BY logs.log_date DESC
-      LIMIT 5
+      ORDER BY reviews.created_at DESC
+      LIMIT 10
     `, [userId]);
 
-    res.json({ friendActivity });
+    res.status(200).json({ friendActivity: activity });
   } catch (error) {
     console.error('Error fetching friend activity:', error);
-    res.status(500).json({ message: 'Failed to fetch friend activity' });
+    res.status(500).json({ message: 'Failed to fetch friend activity.' });
   }
 };
 
