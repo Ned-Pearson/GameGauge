@@ -20,33 +20,26 @@ function Signup() {
   const handleSignup = async (e) => {
     e.preventDefault();
     setError('');
-
+  
     if (!validatePassword(password)) {
       setError('Password must be at least 8 characters long, contain uppercase, lowercase, a number, and a special character.');
       return;
     }
-
+  
     setLoading(true);
-
+  
     try {
-      // Assuming your backend runs on port 5000
       const response = await axios.post('http://localhost:5000/api/signup', { email, username, password });
       
-      if (response.data.success) {
-        // If signup is successful, redirect to the home page
+      if (response.status === 201) {
+        // Redirect to the home page on successful signup
         navigate('/');
       } else {
-        // Display the error message from the backend
-        setError(response.data.message);
+        setError(response.data.message || 'Signup failed. Please try again.');
       }
     } catch (err) {
       console.error('Signup error:', err);
-      // Check if there is an error message returned from the backend
-      if (err.response && err.response.data && err.response.data.message) {
-        setError(err.response.data.message);
-      } else {
-        setError('An error occurred during signup. Please try again.');
-      }
+      setError(err.response?.data?.message || 'An error occurred during signup. Please try again.');
     } finally {
       setLoading(false);
     }
