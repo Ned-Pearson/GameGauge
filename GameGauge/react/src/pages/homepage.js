@@ -40,7 +40,7 @@ const HomePage = () => {
           {username ? (
             <>
               Welcome Back, {username}
-              <div className="popular-text">Here’s what's popular this week</div>
+              <div className="popular-text">Here’s what's popular on Game Gauge</div>
             </>
           ) : (
             <div className="login-prompt">
@@ -50,7 +50,7 @@ const HomePage = () => {
         </div>
   
         <section className="section popular-week">
-          <h2>Popular This Week</h2>
+          <h2>Popular Recently</h2>
           <div className="game-grid">
             {popularGames.length ? (
               popularGames.map((game, idx) => (
