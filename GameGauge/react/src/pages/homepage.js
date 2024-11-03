@@ -82,8 +82,21 @@ const HomePage = () => {
                   >
                     <img src={activity.image_url} alt={activity.game_name} />
                     <div className="game-name">{activity.game_name}</div>
-                    <div className="activity-status">
-                      {activity.username} marked as {activity.status}
+                    <div className="friend-activity-info">
+                      <img
+                        src={activity.profile_pic || 'default_profile.png'}
+                        alt={activity.username}
+                        className="friend-profile-pic"
+                      />
+                      {activity.reviewRating !== null ? (
+                        <div className="activity-rating">
+                          {activity.reviewRating}/10
+                        </div>
+                      ) : (
+                        <div className="activity-review-indicator">
+                          <span className="review-icon">≡</span> {/* displays three horizontal lines as reviewed indicator */}
+                        </div>
+                      )}
                     </div>
                   </div>
                 ))
