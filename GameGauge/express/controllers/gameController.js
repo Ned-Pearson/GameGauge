@@ -128,4 +128,25 @@ const getRatingStats = async (req, res) => {
   }
 };
 
-module.exports = { searchGames, getGameById, getRatingStats };
+const getPopularGames = async (req, res) => {
+  try {
+    const [popularGames] = await db.execute(`
+      SELECT logs.game_id, logs.game_name, logs.image_url,
+             COUNT(reviews.id) AS reviewCount,
+             SUM(CASE WHEN logs.status IN ('completed', 'playing', 'want to play') THEN 1 ELSE 0 END) AS logCount
+      FROM logs
+      LEFT JOIN reviews ON reviews.game_id = logs.game_id
+      WHERE logs.log_date >= NOW() - INTERVAL 1 WEEK
+      GROUP BY logs.game_id, logs.game_name, logs.image_url
+      ORDER BY (reviewCount + logCount) DESC
+      LIMIT 5
+    `);
+
+    res.json({ popularGames });
+  } catch (error) {
+    console.error('Error fetching popular games:', error);
+    res.status(500).json({ message: 'Failed to fetch popular games' });
+  }
+};
+
+module.exports = { searchGames, getGameById, getRatingStats, getPopularGames };
