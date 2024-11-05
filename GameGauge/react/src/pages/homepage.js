@@ -84,9 +84,9 @@ const HomePage = () => {
                     <div className="game-name">{activity.game_name}</div>
                     <div className="friend-activity-info">
                       <img
-                        src={activity.profile_pic || 'default_profile.png'}
-                        alt={activity.username}
                         className="friend-profile-pic"
+                        src={`http://localhost:5000/${activity.profile_pic || 'default_profile.png'}`}
+                        alt={activity.username}
                       />
                       {activity.reviewRating !== null ? (
                         <div className="activity-rating">

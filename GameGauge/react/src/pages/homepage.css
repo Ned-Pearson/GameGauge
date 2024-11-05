@@ -81,12 +81,6 @@ body {
   margin-top: 0.5rem;
 }
 
-.friend-profile-pic {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
 .activity-status, .activity-rating {
   font-size: 0.9rem;
   color: #666;
@@ -111,12 +105,6 @@ body {
   color: #555;
 }
 
-.friend-profile-pic {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
-
 .friend-username {
   font-weight: bold;
 }
@@ -124,4 +112,11 @@ body {
 .activity-rating {
   font-style: italic;
   color: #333;
+}
+
+.friend-profile-pic {
+  width: 40px !important; /* !important used to override other styling for this part */
+  height: 40px !important;
+  border-radius: 50% !important; /* Makes the image circular */
+  object-fit: cover; /* Ensures the image scales to fit within the circle without distortion */
 }
