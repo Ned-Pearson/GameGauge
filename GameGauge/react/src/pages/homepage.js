@@ -53,7 +53,7 @@ const HomePage = () => {
           <h2>Popular Recently</h2>
           <div className="game-grid">
             {popularGames.length ? (
-              popularGames.map((game, idx) => (
+              popularGames.slice(0, 5).map((game, idx) => ( // Limit to 5 items
                 <div
                   key={idx}
                   className="game-card"
@@ -68,13 +68,13 @@ const HomePage = () => {
             )}
           </div>
         </section>
-  
+
         {username && (
           <section className="section new-from-friends">
             <h2>New From Friends</h2>
             <div className="game-grid">
               {friendActivity.length ? (
-                friendActivity.map((activity, idx) => (
+                friendActivity.slice(0, 5).map((activity, idx) => ( // Limit to 5 items
                   <div
                     key={idx}
                     className="game-card"
@@ -84,9 +84,9 @@ const HomePage = () => {
                     <div className="game-name">{activity.game_name}</div>
                     <div className="friend-activity-info">
                       <img
-                        className="friend-profile-pic"
                         src={`http://localhost:5000/${activity.profile_pic || 'default_profile.png'}`}
                         alt={activity.username}
+                        className="friend-profile-pic"
                       />
                       {activity.reviewRating !== null ? (
                         <div className="activity-rating">
@@ -94,7 +94,7 @@ const HomePage = () => {
                         </div>
                       ) : (
                         <div className="activity-review-indicator">
-                          <span className="review-icon">≡</span> {/* displays three horizontal lines as reviewed indicator */}
+                          <span className="review-icon">≡</span>
                         </div>
                       )}
                     </div>
@@ -106,13 +106,13 @@ const HomePage = () => {
             </div>
           </section>
         )}
-  
+
         {username && (
           <section className="section popular-with-friends">
             <h2>Popular With Friends</h2>
             <div className="game-grid">
               {popularWithFriends.length ? (
-                popularWithFriends.map((game, idx) => (
+                popularWithFriends.slice(0, 5).map((game, idx) => ( // Limit to 5 items
                   <div
                     key={idx}
                     className="game-card"
