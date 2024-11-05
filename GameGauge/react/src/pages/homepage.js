@@ -84,7 +84,7 @@ const HomePage = () => {
                     <div className="game-name">{activity.game_name}</div>
                     <div className="friend-activity-info">
                       <img
-                        src={`http://localhost:5000/${activity.profile_pic || 'default_profile.png'}`}
+                        src={`http://localhost:5000/${activity.profile_pic ? activity.profile_pic : 'uploads/default-profile-icon.png'}`}
                         alt={activity.username}
                         className="friend-profile-pic"
                       />
