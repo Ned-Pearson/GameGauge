@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { searchGames } from '../utils/searchGames'; 
 import axios from 'axios';
@@ -9,9 +9,10 @@ function Header() {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [profilePic, setProfilePic] = useState(null); // State for profile picture
+  const [profilePic, setProfilePic] = useState(null);
   const { auth, logout } = useContext(AuthContext);
   const navigate = useNavigate();
+  const searchInputRef = useRef(null); // Create a ref for the search input
 
   useEffect(() => {
     const fetchProfilePic = async () => {
@@ -30,6 +31,11 @@ function Header() {
 
   const handleSearchToggle = () => {
     setIsSearchOpen((prev) => !prev);
+    if (!isSearchOpen) {
+      setTimeout(() => {
+        searchInputRef.current.focus(); // Focus the input if the search bar is opened
+      }, 0); // Use timeout to ensure the input is rendered before focusing
+    }
   };
 
   const handleSearchInputChange = (e) => {
@@ -56,7 +62,7 @@ function Header() {
 
   return (
     <header className="header">
-      {/* Left section with logo */}
+      {/* FIXME Left section with placeholder logo */}
       <div className="header-left">
         <div className="logo">
           <span className="logo-dot" style={{ backgroundColor: '#FF9933' }}></span>
@@ -110,6 +116,7 @@ function Header() {
           ) : (
             <div className="search-bar">
               <input 
+                ref={searchInputRef} // Attach the ref to the input
                 type="text" 
                 placeholder="Search..." 
                 value={searchQuery}
