@@ -135,7 +135,7 @@ function UsersPage() {
             <Link to={`/user/${user.username}`}>
               <img
                 className="profile-picture-placeholder"
-                src={user.profilePic ? `http://localhost:5000/${user.profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"}
+                src={user.profilePic ? `http://localhost:5000/${user.profilePic.replace(/\\/g, '/')}` : 'http://localhost:5000/uploads/default-profile-icon.png'}
                 alt={`${user.username}'s profile`}
               />
             </Link>
@@ -176,7 +176,7 @@ function UsersPage() {
                 <Link to={`/user/${followedUser.username}`}>
                   <img
                     className="profile-picture-placeholder"
-                    src={followedUser.profilePic ? `http://localhost:5000/${followedUser.profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"}
+                    src={followedUser.profilePic ? `http://localhost:5000/${followedUser.profilePic.replace(/\\/g, '/')}` : 'http://localhost:5000/uploads/default-profile-icon.png'}
                     alt={`${followedUser.username}'s profile`}
                     onMouseEnter={() => setHoveredSidebarUser(followedUser.username)}
                     onMouseLeave={() => setHoveredSidebarUser(null)}
@@ -193,7 +193,7 @@ function UsersPage() {
                 <Link to={`/user/${follower.username}`}>
                   <img
                     className="profile-picture-placeholder"
-                    src={follower.profilePic ? `http://localhost:5000/${follower.profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"}
+                    src={follower.profilePic ? `http://localhost:5000/${follower.profilePic.replace(/\\/g, '/')}` : 'http://localhost:5000/uploads/default-profile-icon.png'}
                     alt={`${follower.username}'s profile`}
                     onMouseEnter={() => setHoveredSidebarUser(follower.username)}
                     onMouseLeave={() => setHoveredSidebarUser(null)}

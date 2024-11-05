@@ -1,6 +1,7 @@
 const db = require('../config/db');
 const path = require('path');
 const fs = require('fs');
+const { get } = require('http');
 
 // Follow a user
 const followUser = async (req, res) => {
@@ -223,6 +224,56 @@ const getUserByUsername = async (req, res) => {
   }
 };
 
+const getFriendActivity = async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const [activity] = await db.query(`
+      SELECT reviews.game_id, reviews.game_name, reviews.image_url,
+             users.username, users.profile_pic,
+             reviews.rating AS reviewRating,
+             reviews.review_text AS reviewText,
+             reviews.created_at AS activity_date
+      FROM follows
+      JOIN users ON follows.followed_id = users.id
+      JOIN reviews ON reviews.user_id = users.id
+      WHERE follows.follower_id = ?
+      ORDER BY reviews.created_at DESC
+      LIMIT 10
+    `, [userId]);
+
+    res.status(200).json({ friendActivity: activity });
+  } catch (error) {
+    console.error('Error fetching friend activity:', error);
+    res.status(500).json({ message: 'Failed to fetch friend activity.' });
+  }
+};
+
+const getPopularWithFriends = async (req, res) => {
+  const userId = req.user.userId;
+
+  try {
+    const [popularWithFriends] = await db.execute(`
+      SELECT logs.game_id, logs.game_name, logs.image_url,
+             COUNT(reviews.id) AS reviewCount,
+             SUM(CASE WHEN logs.status IN ('completed', 'playing', 'want to play') THEN 1 ELSE 0 END) AS logCount
+      FROM logs
+      JOIN follows ON follows.followed_id = logs.user_id
+      LEFT JOIN reviews ON reviews.game_id = logs.game_id
+      WHERE follows.follower_id = ? 
+        AND logs.log_date >= NOW() - INTERVAL 1 WEEK
+      GROUP BY logs.game_id, logs.game_name, logs.image_url
+      ORDER BY (reviewCount + logCount) DESC
+      LIMIT 5
+    `, [userId]);
+
+    res.json({ popularWithFriends });
+  } catch (error) {
+    console.error('Error fetching popular games with friends:', error);
+    res.status(500).json({ message: 'Failed to fetch popular games with friends' });
+  }
+};
+
 module.exports = {
   followUser,
   unfollowUser,
@@ -234,4 +285,6 @@ module.exports = {
   searchUsers,
   checkFollowStatus,
   getUserByUsername,
+  getFriendActivity,
+  getPopularWithFriends,
 };

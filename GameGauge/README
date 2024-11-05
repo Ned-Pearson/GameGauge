@@ -1,14 +1,8 @@
 TODO:
 
-- Front page extension
-
-  - Implement the 3 popular display pages on the front end
-  - Due to website likely not being widely used, have the weekly popular functionality but don't update unless there is something new to replace it (just to avoid the areas becoming blank)
-
 - Misc todos
 
   - Fix authContext not supplying a new access token from the refresh token when the access token expires
-  - Fix signup route
   - Update game page to properly get the developer of a game instead of just the first involved company: https://api-docs.igdb.com/#involved-company
 
   - Improve styling of game page
@@ -23,7 +17,7 @@ TODO:
     - Add a change password feature to profile page
     - Add a change username feature
     - Add a change email feature
-  - Make the user select search bar automatically when search bar is toggled open (avoids needing to click on it)
+    - Improve styling of edit profile page
   - Add further sorting for reviews page (select rating ranges etc)
 
   - Maybe a verify email after signup functionality
