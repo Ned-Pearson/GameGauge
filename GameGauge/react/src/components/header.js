@@ -77,7 +77,7 @@ function Header() {
             >
               <img 
                 className="profile-pic" 
-                src={profilePic ? `http://localhost:5000/${profilePic.replace(/\\/g, '/')}` : "https://via.placeholder.com/30"} 
+                src={profilePic ? `http://localhost:5000/${profilePic.replace(/\\/g, '/')}` : 'http://localhost:5000/uploads/default-profile-icon.png'} 
                 alt="Profile" 
               />
               <span className="username">{auth.username}</span>
