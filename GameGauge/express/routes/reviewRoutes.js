@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authMiddleware = require('../middleware/authMiddleware');
-const { setReview, getReview, deleteReview, getAllReviews, getReviewsByUsername, getUserGameReview, getReviewCounts, getAllGameReviews } = require('../controllers/reviewController');
+const { setReview, getReview, deleteReview, getAllReviews, getReviewsByUsername, getUserGameReview, getReviewCounts, getAllGameReviews, getFriendsReviews } = require('../controllers/reviewController');
 
 // Route for fetching reviews by username (No authentication required)
 router.get('/reviews/user/:username', getReviewsByUsername); 
@@ -17,5 +17,7 @@ router.get('/reviews', authMiddleware, getAllReviews);
 router.get('/reviews/:gameId/user/:username', getUserGameReview);
 
 router.get('/games/:gameId/reviews', getAllGameReviews);
+
+router.get('/game/:gameId/friend-reviews', authMiddleware, getFriendsReviews);
 
 module.exports = router;

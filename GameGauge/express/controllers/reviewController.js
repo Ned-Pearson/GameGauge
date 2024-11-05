@@ -207,6 +207,41 @@ const getAllGameReviews = async (req, res) => {
     }
 };
 
+const getFriendsReviews = async (req, res) => {
+    const userId = req.user.userId; // Get the logged-in user's ID from the auth middleware
+    const { gameId } = req.params;
+  
+    try {
+      // Step 1: Retrieve the IDs of friends the user follows
+      const [friends] = await db.query(`
+        SELECT followed_id AS friendId
+        FROM follows
+        WHERE follower_id = ?
+      `, [userId]);
+
+      const friendIds = friends.map(friend => friend.friendId);
+  
+      // Step 2: Fetch reviews for the specified game from friends
+      if (friendIds.length === 0) {
+        return res.json({ reviews: [] }); // If no friends, return an empty array
+      }
+  
+      const [reviews] = await db.query(`
+        SELECT reviews.id, reviews.user_id, reviews.review_text, reviews.rating, reviews.created_at, users.username, users.profile_pic
+        FROM reviews
+        JOIN users ON reviews.user_id = users.id
+        WHERE reviews.game_id = ? AND reviews.user_id IN (?)
+        ORDER BY reviews.created_at DESC
+      `, [gameId, friendIds]);
+  
+      res.json({ reviews });
+
+    } catch (error) {
+      console.error('Error fetching friend reviews:', error);
+      res.status(500).json({ message: 'Error fetching friend reviews' });
+    }
+  };
+
 module.exports = { 
     setReview, 
     getReview, 
@@ -215,5 +250,6 @@ module.exports = {
     getReviewsByUsername, 
     getUserGameReview, 
     getReviewCounts,
-    getAllGameReviews
+    getAllGameReviews,
+    getFriendsReviews
 };
