@@ -5,8 +5,34 @@ TODO:
   - Fix authContext not supplying a new access token from the refresh token when the access token expires
 
   - Improve styling of game page
+
+    - Add a from friends section
+    - Add a more reviews section that displays more review than the page already displays
+    - Update buttons
+    - Update reviewed and logged displays
+    - Add a similar games section
+    - Add links to sites to buy/games site?
+    - Fix review date displaying in the top right of whole page instead of top right of review
+
   - Improve styling of profile page
+
+    - Move edit profile to settings/dropdown
+    - Add a mainpage section before displaying all logs
+      - Display recent activity
+      - Display recent reviews (text based)
+      - Edit profile button
+      - Some user stats?
+      - Average ratings chart
+      - following and followers display
+    - Add a logs section
+    - Add a reviews section
+    - Add a friends section (similar display to the users page)
+
   - Improve styling of users page
+
+    - More user stats
+    - Featured users?
+    - Popular members?
 
   - Make signup auto log user in
   - Trim whitespace on username is signup + signin
