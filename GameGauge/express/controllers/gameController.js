@@ -40,7 +40,7 @@ const searchGames = async (req, res) => {
 
     const igdbResponse = await axios.post(
       'https://api.igdb.com/v4/games',
-      `fields id, name, cover.url, genres.name, summary, involved_companies.company.name, first_release_date; 
+      `fields id, name, cover.url, genres.name, summary, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, first_release_date; 
       search "${query}"; 
       where category = 0 & version_parent = null & parent_game = null; 
       limit ${limit};`, // Dynamically set the limit
@@ -55,8 +55,25 @@ const searchGames = async (req, res) => {
 
     const games = igdbResponse.data;
 
+    // Format the games data to include only the first developer if they exist
+    const formattedGames = games.map(game => {
+      const developers = game.involved_companies && Array.isArray(game.involved_companies)
+        ? game.involved_companies
+            .filter(company => company.developer) // Filter for developers
+            .map(company => company.company.name) // Extract the company names
+        : [];
+
+      // If you only want the first developer, you can do:
+      const primaryDeveloper = developers.length > 0 ? developers[0] : 'Unknown Studio';
+
+      return {
+        ...game,
+        developer: primaryDeveloper, // Include the primary developer in the game object
+      };
+    });
+
     res.json({
-      results: games,
+      results: formattedGames, // Return formatted games with developer
     });
   } catch (error) {
     console.error('Error fetching data from IGDB:', error.response?.data || error.message);
@@ -75,7 +92,7 @@ const getGameById = async (req, res) => {
 
     const response = await axios.post(
       'https://api.igdb.com/v4/games',
-      `fields name, summary, genres.name, platforms.name, first_release_date, involved_companies.company.name, cover.url, artworks.url; where id = ${gameId};`,
+      `fields name, summary, genres.name, platforms.name, first_release_date, involved_companies.company.name, involved_companies.developer, involved_companies.publisher, cover.url, artworks.url; where id = ${gameId};`,
       {
         headers: {
           'Client-ID': process.env.IGDB_CLIENT_ID,
@@ -89,7 +106,26 @@ const getGameById = async (req, res) => {
       return res.status(404).json({ message: 'Game not found.' });
     }
 
-    res.json({ game: response.data[0] });
+    // Extract the game information
+    const game = response.data[0];
+
+    // Find the developer from the involved companies if they exist
+    const developers = game.involved_companies && Array.isArray(game.involved_companies)
+      ? game.involved_companies
+          .filter(company => company.developer) // Filter for developers
+          .map(company => company.company.name) // Extract the company names
+      : [];
+
+    // If you only want the first developer, you can do:
+    const primaryDeveloper = developers.length > 0 ? developers[0] : 'Unknown Studio';
+
+    // Include developer information in the response
+    res.json({
+      game: {
+        ...game,
+        developers: primaryDeveloper, 
+      },
+    });
   } catch (error) {
     console.error('Error fetching game details from IGDB:', error.response?.data || error.message);
     res.status(500).json({ message: 'Failed to fetch game details from IGDB.' });
