@@ -14,7 +14,6 @@ import ProfileReviews from './pages/profileReviews';
 import UsersPage from './pages/usersPage';
 import EditProfile from './pages/editProfile';
 
-
 function App() {
   return (
     <Router>
@@ -23,36 +22,19 @@ function App() {
         <div className="main-content">
           <Routes>
             <Route path="/" element={<HomePage />} />
-          </Routes>
-          <Routes>
             <Route path="/signup" element={<Signup />} />
-          </Routes>
-          <Routes>
             <Route path="/signin" element={<Signin />} />
-          </Routes>
-          <Routes>
             <Route path="/search-results" element={<SearchResults />} />
-          </Routes>
-          <Routes>
             <Route path="/game/:id" element={<GamePage />} />
-          </Routes>
-          <Routes>
             <Route path="/users" element={<UsersPage />} />
-          </Routes>
-          <Routes>
             <Route path="/user/:username" element={<Profile />} />
-          </Routes>
-          <Routes>
             <Route path="/user/:username/reviews" element={<ProfileReviews />} />
-          </Routes>
-          <Routes>
             <Route path="/user/:username/edit-profile" element={<EditProfile />} />
           </Routes>
-          
         </div>
         <Footer /> {/* Needs expansion */}
       </AuthProvider>
-      </Router>
+    </Router>
   );
 }
 
