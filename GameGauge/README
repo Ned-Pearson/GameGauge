@@ -1,10 +1,5 @@
 TODO:
 
-- Front page extension
-
-  - Fix profile picture displays in activity type on homepage
-  - Place the sections in a carousel on the front page with a max of 12 games per section
-
 - Misc todos
 
   - Fix authContext not supplying a new access token from the refresh token when the access token expires
@@ -22,7 +17,7 @@ TODO:
     - Add a change password feature to profile page
     - Add a change username feature
     - Add a change email feature
-  - Make the user select search bar automatically when search bar is toggled open (avoids needing to click on it)
+    - Improve styling of edit profile page
   - Add further sorting for reviews page (select rating ranges etc)
 
   - Maybe a verify email after signup functionality
