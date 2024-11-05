@@ -3,7 +3,6 @@ TODO:
 - Misc todos
 
   - Fix authContext not supplying a new access token from the refresh token when the access token expires
-  - Update game page to properly get the developer of a game instead of just the first involved company: https://api-docs.igdb.com/#involved-company
 
   - Improve styling of game page
   - Improve styling of profile page
@@ -21,3 +20,4 @@ TODO:
   - Add further sorting for reviews page (select rating ranges etc)
 
   - Maybe a verify email after signup functionality
+  - Paritial search functionality if possible
