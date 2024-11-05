@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import API from '../utils/axios';
 import './gamePage.css';
 import LogButton from '../components/logButton';
 import RateReviewButton from '../components/rateReviewButton';
@@ -11,33 +11,57 @@ function GameDetails() {
   const [game, setGame] = useState(null);
   const [logCounts, setLogCounts] = useState({ completedCount: 0, playingCount: 0 });
   const [ratings, setRatings] = useState(null);
-  const [reviews, setReviews] = useState([]); // State for reviews
+  const [reviews, setReviews] = useState([]); 
   const [loading, setLoading] = useState(true);
+  const [friendReviews, setFriendReviews] = useState([]);
 
   useEffect(() => {
     const fetchGameDetails = async () => {
       try {
-        const gameResponse = await axios.post('http://localhost:5000/api/game', { gameId: id });
+        console.log('Fetching game details for game ID:', id);
+  
+        const gameResponse = await API.post('/game', { gameId: id });
+        console.log('Game data:', gameResponse.data);
         setGame(gameResponse.data.game);
-
-        const logCountsResponse = await axios.get(`http://localhost:5000/api/logs/${id}/counts`);
+  
+        const logCountsResponse = await API.get(`/logs/${id}/counts`);
+        console.log('Log counts:', logCountsResponse.data);
         setLogCounts(logCountsResponse.data);
-
-        const ratingsResponse = await axios.get(`http://localhost:5000/api/games/${id}/ratings`);
+  
+        const ratingsResponse = await API.get(`/games/${id}/ratings`);
+        console.log('Ratings data:', ratingsResponse.data);
         setRatings(ratingsResponse.data);
-
-        // Fetch reviews for the game
-        const reviewsResponse = await axios.get(`http://localhost:5000/api/games/${id}/reviews`);
+  
+        const reviewsResponse = await API.get(`/games/${id}/reviews`);
+        console.log('Recent reviews:', reviewsResponse.data.reviews);
         setReviews(reviewsResponse.data.reviews);
+  
+        // Check token before making friend reviews request
+        const token = localStorage.getItem('token');
+        if (!token) {
+          console.error('No token found in localStorage.');
+        } else {
+          console.log('Token found in localStorage:', token);
+        }
+  
+        // Friend reviews request with additional console logs
+        const friendReviewsResponse = await API.get(`/game/${id}/friend-reviews`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log('Friend reviews:', friendReviewsResponse.data.reviews);
+        setFriendReviews(friendReviewsResponse.data.reviews);
+        
       } catch (error) {
         console.error('Error fetching game details, log counts, or reviews:', error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchGameDetails();
-  }, [id]);
+  }, [id]);  
 
   if (loading) {
     return (
@@ -75,7 +99,6 @@ function GameDetails() {
         <h1 className="game-title">{game.name}</h1>
         <p className="game-release-date">{new Date(game.first_release_date * 1000).toLocaleDateString()}</p>
         
-        {/* Updated to display developers */}
         <p className="game-studio">
           <strong>Developer: </strong>
           {game.developers || 'Unknown Developer'}
@@ -107,6 +130,25 @@ function GameDetails() {
           )}
         </div>
 
+        {/* Display Friend Reviews */}
+        <div className="friend-reviews">
+          <h2>Friend Reviews</h2>
+          {friendReviews.length > 0 ? (
+            <ul>
+              {friendReviews.map((review, index) => (
+                <li key={index} className="review-item">
+                  <p><strong>{review.username}</strong> rated: {review.rating || 'No rating given'}</p>
+                  <p>{review.review_text}</p>
+                  <p className="review-date">{new Date(review.created_at).toLocaleDateString()}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No friend reviews available for this game.</p>
+          )}
+        </div>
+
+        {/* Display Recent Reviews */}
         <div className="recent-reviews">
           <h2>Recent Reviews</h2>
           {reviews.length > 0 ? (
