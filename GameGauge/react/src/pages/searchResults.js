@@ -79,7 +79,10 @@ function SearchResults() {
                     <div className="search-result-details">
                       <h2 className="game-title">{game.name}</h2>
                       <p className="game-release">{new Date(game.first_release_date * 1000).getFullYear() || 'N/A'}</p>
-                      <p className="game-studio">{game.involved_companies?.[0]?.company?.name || 'Unknown Studio'}</p>
+                      
+                      {/* Display developer name, which is now fetched from the API */}
+                      <p className="game-studio">{game.developer}</p> 
+                      
                       <p className="game-summary">{game.summary ? `${game.summary}` : 'No summary available.'}</p>
                     </div>
                   </div>

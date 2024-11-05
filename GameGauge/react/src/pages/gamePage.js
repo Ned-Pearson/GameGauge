@@ -74,7 +74,13 @@ function GameDetails() {
       <div className="game-details">
         <h1 className="game-title">{game.name}</h1>
         <p className="game-release-date">{new Date(game.first_release_date * 1000).toLocaleDateString()}</p>
-        <p className="game-studio">{game.involved_companies?.[0]?.company?.name || 'Unknown Studio'}</p>
+        
+        {/* Updated to display developers */}
+        <p className="game-studio">
+          <strong>Developer: </strong>
+          {game.developers || 'Unknown Developer'}
+        </p>
+        
         <p className="game-summary">{game.summary || 'No summary available.'}</p>
 
         <p className="game-genres">
