@@ -6,7 +6,6 @@ TODO:
 
   - Improve styling of game page
 
-    - Add a from friends section
     - Add a more reviews section that displays more review than the page already displays
     - Update buttons
     - Update reviewed and logged displays
@@ -32,6 +31,10 @@ TODO:
     - More user stats
     - Featured users?
     - Popular members?
+
+  - Add a games page linking from header
+
+    - Sorting options for popular, new, rating, alphabetical etc
 
   - Make signup auto log user in
   - Trim whitespace on username is signup + signin
