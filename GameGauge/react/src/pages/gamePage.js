@@ -13,6 +13,7 @@ function GameDetails() {
   const [ratings, setRatings] = useState(null);
   const [reviews, setReviews] = useState([]); 
   const [friendReviews, setFriendReviews] = useState([]);
+  const [similarGames, setSimilarGames] = useState([]); // New state for similar games
   const [loading, setLoading] = useState(true);
   const [showMoreFriendReviews, setShowMoreFriendReviews] = useState(false);
   const [showMoreReviews, setShowMoreReviews] = useState(false);
@@ -39,6 +40,10 @@ function GameDetails() {
           },
         });
         setFriendReviews(friendReviewsResponse.data.reviews);
+
+        // Fetch similar games
+        const similarGamesResponse = await API.get(`/similar-games/${id}`);
+        setSimilarGames(similarGamesResponse.data.similarGames);
 
       } catch (error) {
         console.error('Error fetching game details, log counts, or reviews:', error);
@@ -163,6 +168,27 @@ function GameDetails() {
             <button onClick={() => setShowMoreReviews(!showMoreReviews)}>
               {showMoreReviews ? 'Show Less' : 'Load More'}
             </button>
+          )}
+        </div>
+
+        {/* Display Similar Games */}
+        <div className="similar-games">
+          <h2>Similar Games</h2>
+          {similarGames.length > 0 ? (
+            <ul className="similar-games-list">
+              {similarGames.map((similarGame) => (
+                <li key={similarGame.id} className="similar-game-item">
+                  <img
+                    src={similarGame.cover ? `https:${similarGame.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/100x150'}
+                    alt={similarGame.name}
+                    className="similar-game-cover"
+                  />
+                  <p className="similar-game-name">{similarGame.name}</p>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>No similar games found.</p>
           )}
         </div>
       </div>
