@@ -224,7 +224,7 @@ const getSimilarGames = async (req, res) => {
     const similarGamesResponse = await axios.post(
       'https://api.igdb.com/v4/games',
       `fields id, name, cover.url, genres.name, first_release_date; 
-      where id = (${similarGameIds.slice(0, 5).join(',')});`,
+      where id = (${similarGameIds.slice(0, 7).join(',')});`,
       {
         headers: {
           'Client-ID': process.env.IGDB_CLIENT_ID,
