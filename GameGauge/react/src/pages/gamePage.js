@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import API from '../utils/axios';
 import './gamePage.css';
 import LogButton from '../components/logButton';
@@ -11,9 +11,9 @@ function GameDetails() {
   const [game, setGame] = useState(null);
   const [logCounts, setLogCounts] = useState({ completedCount: 0, playingCount: 0 });
   const [ratings, setRatings] = useState(null);
-  const [reviews, setReviews] = useState([]); 
+  const [reviews, setReviews] = useState([]);
   const [friendReviews, setFriendReviews] = useState([]);
-  const [similarGames, setSimilarGames] = useState([]); // New state for similar games
+  const [similarGames, setSimilarGames] = useState([]); // State for similar games
   const [loading, setLoading] = useState(true);
   const [showMoreFriendReviews, setShowMoreFriendReviews] = useState(false);
   const [showMoreReviews, setShowMoreReviews] = useState(false);
@@ -178,12 +178,14 @@ function GameDetails() {
             <ul className="similar-games-list">
               {similarGames.map((similarGame) => (
                 <li key={similarGame.id} className="similar-game-item">
-                  <img
-                    src={similarGame.cover ? `https:${similarGame.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/100x150'}
-                    alt={similarGame.name}
-                    className="similar-game-cover"
-                  />
-                  <p className="similar-game-name">{similarGame.name}</p>
+                  <Link to={`/game/${similarGame.id}`} className="similar-game-link">
+                    <img
+                      src={similarGame.cover ? `https:${similarGame.cover.url.replace('t_thumb', 't_cover_big')}` : 'https://via.placeholder.com/100x150'}
+                      alt={similarGame.name}
+                      className="similar-game-cover"
+                    />
+                    <p className="similar-game-name">{similarGame.name}</p>
+                  </Link>
                 </li>
               ))}
             </ul>
