@@ -18,39 +18,27 @@ function GameDetails() {
   useEffect(() => {
     const fetchGameDetails = async () => {
       try {
-        console.log('Fetching game details for game ID:', id);
   
         const gameResponse = await API.post('/game', { gameId: id });
-        console.log('Game data:', gameResponse.data);
         setGame(gameResponse.data.game);
   
         const logCountsResponse = await API.get(`/logs/${id}/counts`);
-        console.log('Log counts:', logCountsResponse.data);
         setLogCounts(logCountsResponse.data);
   
         const ratingsResponse = await API.get(`/games/${id}/ratings`);
-        console.log('Ratings data:', ratingsResponse.data);
         setRatings(ratingsResponse.data);
   
         const reviewsResponse = await API.get(`/games/${id}/reviews`);
-        console.log('Recent reviews:', reviewsResponse.data.reviews);
         setReviews(reviewsResponse.data.reviews);
   
-        // Check token before making friend reviews request
         const token = localStorage.getItem('token');
-        if (!token) {
-          console.error('No token found in localStorage.');
-        } else {
-          console.log('Token found in localStorage:', token);
-        }
-  
+
         // Friend reviews request with additional console logs
         const friendReviewsResponse = await API.get(`/game/${id}/friend-reviews`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
-        console.log('Friend reviews:', friendReviewsResponse.data.reviews);
         setFriendReviews(friendReviewsResponse.data.reviews);
         
       } catch (error) {
