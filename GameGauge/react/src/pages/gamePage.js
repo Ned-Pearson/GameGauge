@@ -12,44 +12,46 @@ function GameDetails() {
   const [logCounts, setLogCounts] = useState({ completedCount: 0, playingCount: 0 });
   const [ratings, setRatings] = useState(null);
   const [reviews, setReviews] = useState([]); 
-  const [loading, setLoading] = useState(true);
   const [friendReviews, setFriendReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showMoreFriendReviews, setShowMoreFriendReviews] = useState(false);
+  const [showMoreReviews, setShowMoreReviews] = useState(false);
 
   useEffect(() => {
     const fetchGameDetails = async () => {
       try {
-  
         const gameResponse = await API.post('/game', { gameId: id });
         setGame(gameResponse.data.game);
-  
+
         const logCountsResponse = await API.get(`/logs/${id}/counts`);
         setLogCounts(logCountsResponse.data);
-  
+
         const ratingsResponse = await API.get(`/games/${id}/ratings`);
         setRatings(ratingsResponse.data);
-  
+
         const reviewsResponse = await API.get(`/games/${id}/reviews`);
         setReviews(reviewsResponse.data.reviews);
-  
-        const token = localStorage.getItem('token');
 
-        // Friend reviews request with additional console logs
+        const token = localStorage.getItem('token');
         const friendReviewsResponse = await API.get(`/game/${id}/friend-reviews`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         setFriendReviews(friendReviewsResponse.data.reviews);
-        
+
       } catch (error) {
         console.error('Error fetching game details, log counts, or reviews:', error);
       } finally {
         setLoading(false);
       }
     };
-  
+
     fetchGameDetails();
-  }, [id]);  
+  }, [id]);
+
+  const displayedFriendReviews = showMoreFriendReviews ? friendReviews : friendReviews.slice(0, 4);
+  const displayedReviews = showMoreReviews ? reviews : reviews.slice(0, 4);
 
   if (loading) {
     return (
@@ -121,9 +123,9 @@ function GameDetails() {
         {/* Display Friend Reviews */}
         <div className="friend-reviews">
           <h2>Friend Reviews</h2>
-          {friendReviews.length > 0 ? (
+          {displayedFriendReviews.length > 0 ? (
             <ul>
-              {friendReviews.map((review, index) => (
+              {displayedFriendReviews.map((review, index) => (
                 <li key={index} className="review-item">
                   <p><strong>{review.username}</strong> rated: {review.rating || 'No rating given'}</p>
                   <p>{review.review_text}</p>
@@ -134,14 +136,19 @@ function GameDetails() {
           ) : (
             <p>No friend reviews available for this game.</p>
           )}
+          {friendReviews.length > 4 && (
+            <button onClick={() => setShowMoreFriendReviews(!showMoreFriendReviews)}>
+              {showMoreFriendReviews ? 'Show Less' : 'Load More'}
+            </button>
+          )}
         </div>
 
         {/* Display Recent Reviews */}
         <div className="recent-reviews">
           <h2>Recent Reviews</h2>
-          {reviews.length > 0 ? (
+          {displayedReviews.length > 0 ? (
             <ul>
-              {reviews.map((review, index) => (
+              {displayedReviews.map((review, index) => (
                 <li key={index} className="review-item">
                   <p><strong>{review.username}</strong> rated: {review.rating || 'No rating given'}</p>
                   <p>{review.review_text}</p>
@@ -151,6 +158,11 @@ function GameDetails() {
             </ul>
           ) : (
             <p>No reviews available for this game.</p>
+          )}
+          {reviews.length > 4 && (
+            <button onClick={() => setShowMoreReviews(!showMoreReviews)}>
+              {showMoreReviews ? 'Show Less' : 'Load More'}
+            </button>
           )}
         </div>
       </div>
