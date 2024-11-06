@@ -11,9 +11,9 @@ function GameDetails() {
   const [game, setGame] = useState(null);
   const [logCounts, setLogCounts] = useState({ completedCount: 0, playingCount: 0 });
   const [ratings, setRatings] = useState(null);
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState([]); 
   const [friendReviews, setFriendReviews] = useState([]);
-  const [similarGames, setSimilarGames] = useState([]); // State for similar games
+  const [similarGames, setSimilarGames] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showMoreFriendReviews, setShowMoreFriendReviews] = useState(false);
   const [showMoreReviews, setShowMoreReviews] = useState(false);
@@ -34,14 +34,16 @@ function GameDetails() {
         setReviews(reviewsResponse.data.reviews);
 
         const token = localStorage.getItem('token');
-        const friendReviewsResponse = await API.get(`/game/${id}/friend-reviews`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setFriendReviews(friendReviewsResponse.data.reviews);
+        if (token) {
+          const friendReviewsResponse = await API.get(`/game/${id}/friend-reviews`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setFriendReviews(friendReviewsResponse.data.reviews);
+        }
 
-        // Fetch similar games
+        // Fetch similar games without authentication
         const similarGamesResponse = await API.get(`/similar-games/${id}`);
         setSimilarGames(similarGamesResponse.data.similarGames);
 
