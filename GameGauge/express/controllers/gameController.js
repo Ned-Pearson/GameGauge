@@ -185,4 +185,62 @@ const getPopularGames = async (req, res) => {
   }
 };
 
-module.exports = { searchGames, getGameById, getRatingStats, getPopularGames };
+const getSimilarGames = async (req, res) => {
+  const { gameId } = req.params;
+
+  if (!gameId) {
+    return res.status(400).json({ message: 'Game ID is required.' });
+  }
+
+  try {
+    const accessToken = await getAccessToken();
+
+    // Query IGDB for similar games
+    const igdbResponse = await axios.post(
+      'https://api.igdb.com/v4/games',
+      `fields similar_games; 
+      where id = ${gameId};`,
+      {
+        headers: {
+          'Client-ID': process.env.IGDB_CLIENT_ID,
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'text/plain',
+        },
+      }
+    );
+
+    if (!igdbResponse.data || igdbResponse.data.length === 0) {
+      return res.status(404).json({ message: 'Game not found.' });
+    }
+
+    // Extract similar game IDs
+    const similarGameIds = igdbResponse.data[0].similar_games || [];
+
+    if (similarGameIds.length === 0) {
+      return res.status(404).json({ message: 'No similar games found.' });
+    }
+
+    // Query IGDB for the details of similar games, limited to 5 games
+    const similarGamesResponse = await axios.post(
+      'https://api.igdb.com/v4/games',
+      `fields id, name, cover.url, genres.name, first_release_date; 
+      where id = (${similarGameIds.slice(0, 5).join(',')});`,
+      {
+        headers: {
+          'Client-ID': process.env.IGDB_CLIENT_ID,
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'text/plain',
+        },
+      }
+    );
+
+    const similarGames = similarGamesResponse.data;
+
+    res.json({ similarGames });
+  } catch (error) {
+    console.error('Error fetching similar games:', error.response?.data || error.message);
+    res.status(500).json({ message: 'Failed to fetch similar games.' });
+  }
+};
+
+module.exports = { searchGames, getGameById, getRatingStats, getPopularGames, getSimilarGames };
