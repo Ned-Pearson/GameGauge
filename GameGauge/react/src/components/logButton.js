@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import API from '../utils/axios'; // Use the configured Axios instance
+import API from '../utils/axios'; 
 import { isAuthenticated } from '../utils/auth'; 
 import './logButton.css';
 
@@ -17,10 +17,7 @@ const LogButton = ({ game }) => {
   }, []);
 
   const toggleDropdown = () => {
-    setDropdownOpen(prevState => {
-      console.log('Dropdown state before toggle:', prevState); // Debugging line
-      return !prevState;
-    });
+    setDropdownOpen(prevState => !prevState);
   };
 
   const fetchCurrentStatus = async () => {
@@ -37,7 +34,6 @@ const LogButton = ({ game }) => {
   };
 
   const handleStatusChange = async (newStatus) => {
-    console.log('Selected status:', newStatus); // Debugging line
     try {
       if (newStatus === 'none') {
         await API.delete(`/logs/${game.id}`);
@@ -85,9 +81,6 @@ const LogButton = ({ game }) => {
         </div>
       )}
       {message && <p className="log-message">{message}</p>}
-      <div>
-        <p>Dropdown Open: {dropdownOpen ? 'Yes' : 'No'}</p> {/* Debugging line */}
-      </div>
     </div>
   );
 };
