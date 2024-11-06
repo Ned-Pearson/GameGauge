@@ -186,7 +186,6 @@ function GameDetails() {
                       alt={similarGame.name}
                       className="similar-game-cover"
                     />
-                    <p className="similar-game-name">{similarGame.name}</p>
                   </Link>
                 </li>
               ))}
